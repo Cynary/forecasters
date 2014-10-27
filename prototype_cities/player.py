@@ -43,7 +43,9 @@ class Player:
 
     def addShortTerm(self, city):
         cost = self.SHORT_TERM_AMOUNT*self.SHORT_TERM_COST
-        if self.gold >= cost:
+        if self.cities[city-1].temporaryPreparedness != 0:
+            return "Can't buy short term preparedness more than once."
+        elif self.gold >= cost:
             self.cities[city-1].temporaryPrepare(self.SHORT_TERM_AMOUNT)
             self.gold -= cost
             return "Added %d%% short term preparedness to city #%d" % (self.SHORT_TERM_AMOUNT,city)

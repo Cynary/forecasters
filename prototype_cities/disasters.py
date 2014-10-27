@@ -18,7 +18,7 @@ class Disasters:
     def forecast(self):
         forecast = ""
         if self.n == 0:
-            forecast = "*** Forecast for this turn ***\n%s\n" % "\n".join(["City #%d: %f" % (i+1, prob) for i,prob in enumerate(self.probs)])
+            forecast = "*** Forecast for this turn ***\n%s\n" % "\n".join(["City #%d: %.2f%% probability of disaster" % (i+1, prob*100) for i,prob in enumerate(self.probs)])
         else:
             forecast = "No forecast for this turn. Upgrade to get more frequent forecasts.\n"
         self.n = (self.n+1)%self.period
