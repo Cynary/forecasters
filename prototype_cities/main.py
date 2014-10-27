@@ -1,5 +1,9 @@
 from player import *
 
+# Fix python 2.x
+try: input = raw_input
+except NameError: pass
+
 N_CITIES = 2
 VOLUNTEERS_WIN = 500
 
