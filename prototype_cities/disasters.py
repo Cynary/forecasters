@@ -25,8 +25,9 @@ class Disasters:
         return forecast
 
     def upgrade(self):
-        self.period -= 1
-        self.n %= self.period
+        if self.period != 1:
+            self.period -= 1
+            self.n %= self.period
 
     def turn(self):
         disasters = ""

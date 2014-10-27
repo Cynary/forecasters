@@ -29,7 +29,7 @@ while (not lose(p)) and (not win(p)):
             "b) Add permanent preparedness (decreases damage from disasters) -- 10% preparedness for 100 gold\n" + \
             "c) Add short term preparedness (cheaper, but only decreases damage for one round) -- 50% short term preparedness for 20 gold\n" + \
             "d) Heal one of your cities -- 10% health for 50 gold\n" + \
-            "e) Upgrade forecasting (decreases the period at which you get forecasts) -- 50% for each upgrade, decreasing period by 1\n" + \
+            "e) Upgrade forecasting (decreases the period at which you get forecasts) -- 50 gold for each upgrade, decreasing period by 1\n" + \
             "f) Indicate you are ready to move to the next turn"
         )
         option = input("Write a/b/c/d/e/f to select an action: ")

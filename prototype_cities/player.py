@@ -63,7 +63,9 @@ class Player:
 
     def upgradeForecasting(self):
         cost = self.UPGRADE_COST
-        if self.gold >= cost:
+        if self.disasterGenerator.period == 1:
+            return "Can't upgrade forecasting further: you are getting forecasts every turn."
+        elif self.gold >= cost:
             self.disasterGenerator.upgrade()
             self.gold -= cost
             return "You now get forecasts more often."
