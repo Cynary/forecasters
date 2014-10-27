@@ -10,7 +10,9 @@ class City:
         self.temporaryPreparedness = 0.0
 
     def disasterHits(self, damage):
-        self.health -= max(0,damage-(self.preparedness+self.temporaryPreparedness)/2.)
+        healthLoss = max(0,damage-(self.preparedness+self.temporaryPreparedness)/2.)
+        self.health -= healthLoss
+        return "You lost %.2f%% health in your city. The disaster caused %.2f%% damage, but your preparedness caused you to supress %.2f%% of that damage." % (healthLoss,damage,(self.preparedness+self.temporaryPreparedness)/2.)
 
     def heal(self, extraHealth):
         self.health = min(100,self.health+extraHealth)

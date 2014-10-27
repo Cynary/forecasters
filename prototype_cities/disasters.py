@@ -13,7 +13,7 @@ class Disasters:
         self.cities.append(city)
 
     def generateDisasters(self):
-        self.probs = [min(abs(random.gauss(0,0.3)),1.) for _ in self.cities]
+        self.probs = [min(abs(random.gauss(0,0.15)),1.) for _ in self.cities]
 
     def forecast(self):
         forecast = ""
@@ -35,7 +35,9 @@ class Disasters:
             deciding = random.random()
             if deciding <= prob:
                 disasters += "Disaster hit in city #%d\n" % (i+1)
-                city.disasterHits(self.DISASTER_DAMAGE)
+                disasters += city.disasterHits(self.DISASTER_DAMAGE)
             else:
                 disasters += "It was a normal day in city #%d\n" % (i+1)
+                if city.temporaryPreparedness != 0:
+                    disasters += "Your citizens are not happy with you for wasting your money on short term preparedness.\n"
         return disasters

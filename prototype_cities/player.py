@@ -87,5 +87,10 @@ class Player:
     def turn(self):
         disasters = self.disasterGenerator.turn()
         [city.turn() for city in self.cities]
+        for i,c in enumerate(self.cities):
+            if c.health != 100:
+                healthGain = c.volunteers/20.
+                c.heal(healthGain)
+                disasters += "The %d volunteers in city #%d have participated in efforts rebuilding your city, and made it regain some of its health.\n"
         self.gold += sum(self.cityHealth())/2
         return disasters
