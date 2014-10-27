@@ -13,7 +13,7 @@ class Disasters:
         self.cities.append(city)
 
     def generateDisasters(self):
-        self.probs = [random.random() for _ in self.cities]
+        self.probs = [min(abs(random.gauss(0,0.3)),1.) for _ in self.cities]
 
     def forecast(self):
         forecast = ""
