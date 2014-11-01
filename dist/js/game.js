@@ -15,7 +15,86 @@ window.onload = function () {
 
   game.state.start('boot');
 };
-},{"./states/boot":2,"./states/gameover":3,"./states/menu":4,"./states/play":5,"./states/preload":6}],2:[function(require,module,exports){
+},{"./states/boot":4,"./states/gameover":5,"./states/menu":6,"./states/play":7,"./states/preload":8}],2:[function(require,module,exports){
+//A Button to be displayed on top of a region.
+//Onclick: function that is fired when the button is clicked.
+//This by itself doesn't do anything. It is used with the 'Region' Class.
+//The onclick method is Passed with the region the button is tied to.
+function Button(texture, onclick){
+    this.texture = texture
+    this.onclick = onclick 
+}
+
+
+module.exports = Button;
+},{}],3:[function(require,module,exports){
+Button = require('../objects/Button')
+
+// Broad Region Class.
+// attributes: JS object (dictionary) to additionally specify the details of the region. optional.
+function Region (game, texture, locX, locY, attributes){
+  this.game = game;
+  this.texture = texture;
+  this.locX = locX;
+  this.locY = locY; 
+  var self = this;
+  this.buttons = []
+  this.texts = []
+  if (attributes){
+    Object.keys(attributes).map(function(attribute){
+      self[attribute] = attributes[attribute]
+    })
+  }
+
+
+  this.sprite = game.add.sprite(locX, locY, texture);
+  this.sprite.inputEnabled = true;
+
+  this.addButton = function(button, x, y){
+    var x = x || 0;
+    var y = y || 0;
+    var buttonsprite = game.add.sprite(locX + x, locY + y, button.texture);
+    buttonsprite.inputEnabled = true;
+    buttonsprite.events.onInputDown.add(function(){button.onclick(self)});
+    console.log(buttonsprite.events.onInputDown)
+    self.sprite.events.onInputDown.add(function(){console.log('clicked here')})
+    this.buttons.push({
+      'buttonobj':button,
+      'x':x,
+      'y':y,
+      'buttonsprite':buttonsprite
+    })
+  }
+  
+  this.addText = function(name,x,y, isAttribute){
+    if(isAttribute){
+      var text = name + ' ' + self[name]
+    }else{
+      var text = name;
+    }
+    console.log(text)
+    textobj = game.add.text(locX + x, locY+ y, text);
+    this.texts.push({
+      'isAttribute':isAttribute,
+      'name':name,
+      'textobj': textobj,
+      'x':x,
+      'y':y
+    })
+  }
+  
+  
+  this.update = function(){
+    self.texts.map(function(text){
+      if(text.isAttribute){
+       textobj.text = text.name + ' ' + self[text.name];
+      }
+    })
+  }
+}
+
+module.exports = Region;
+},{"../objects/Button":2}],4:[function(require,module,exports){
 
 'use strict';
 
@@ -34,7 +113,7 @@ Boot.prototype = {
 
 module.exports = Boot;
 
-},{}],3:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 
 'use strict';
 function GameOver() {}
@@ -62,7 +141,7 @@ GameOver.prototype = {
 };
 module.exports = GameOver;
 
-},{}],4:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 
 'use strict';
 function Menu() {}
@@ -94,34 +173,30 @@ Menu.prototype = {
 
 module.exports = Menu;
 
-},{}],5:[function(require,module,exports){
-
+},{}],7:[function(require,module,exports){
+Region = require('../objects/Region');
   'use strict';
   function Play() {}
   Play.prototype = {
     create: function() {
-      this.game.physics.startSystem(Phaser.Physics.ARCADE);
-      this.sprite = this.game.add.sprite(this.game.width/2, this.game.height/2, 'yeoman');
-      this.sprite.inputEnabled = true;
-      
-      this.game.physics.arcade.enable(this.sprite);
-      this.sprite.body.collideWorldBounds = true;
-      this.sprite.body.bounce.setTo(1,1);
-      this.sprite.body.velocity.x = this.game.rnd.integerInRange(-500,500);
-      this.sprite.body.velocity.y = this.game.rnd.integerInRange(-500,500);
-
-      this.sprite.events.onInputDown.add(this.clickListener, this);
+      regionTest = new Region(this.game,'city', this.game.width/2, this.game.height/3, {preparedness: 10});
+      game= this.game;
+      button = new Button('fortify', function(region){
+        console.log('clicked')
+        console.log(region.preparedness)
+        region.preparedness += 50
+      })
+      regionTest.addButton(button, 10, 10);
+      regionTest.addText('preparedness',10,50,true);
     },
     update: function() {
-
+      regionTest.update();
+      regionTest.preparedness -= 1;
     },
-    clickListener: function() {
-      this.game.state.start('gameover');
-    }
   };
   
   module.exports = Play;
-},{}],6:[function(require,module,exports){
+},{"../objects/Region":3}],8:[function(require,module,exports){
 
 'use strict';
 function Preload() {
@@ -137,6 +212,8 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('yeoman', 'assets/yeoman-logo.png');
+    this.load.image('city', 'assets/city.jpg');
+    this.load.image('fortify', 'assets/fortify.png');
 
   },
   create: function() {
