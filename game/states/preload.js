@@ -15,6 +15,8 @@ Preload.prototype = {
     this.load.image('yeoman', 'assets/yeoman-logo.png');
     this.load.image('city', 'assets/city.jpg');
     this.load.image('fortify', 'assets/fortify.png');
+    this.load.image('supplies', 'assets/supplies.png');
+    this.load.image('evac', 'assets/evac.png');
 
   },
   create: function() {
