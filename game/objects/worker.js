@@ -34,7 +34,10 @@ Worker.State = function(worker, lastState) {
 }
 Worker.State.prototype = {
   update: function(dt) {},
-  requestState: function(state) { this.nextState = state }
+  requestState: function(state) { this.nextState = state },
+  getStatusText: function() {
+    return "Placeholder";
+  },
 };
 
 // Helper function to create states that inherit from Worker.State
@@ -61,6 +64,11 @@ createStateType('Gather',
           this.worker.currentRegion.supplies += 1;
         }
       },
+
+      getStatusText: function() {
+        var gatherTime = this.gatherTimer / this.worker.currentRegion.efficiency;
+        return "Gathering: " + Math.floor(10.0 * gatherTime) / 10.0;
+      }
     });
 
 createStateType('Evac',
@@ -76,18 +84,27 @@ createStateType('Evac',
     {
       update: function(dt) {
         if (this.evacTimer > 0.0) {
-          this.evacTimer -= dt * this.currentRegion.efficiency;
+          this.evacTimer -= dt * this.worker.currentRegion.efficiency;
         } else {
           this.evacTimer = 0.0;
-          this.safe = true;
+          this.worker.safe = true;
         }
       },
 
       requestState: function(state) {
         this.nextState = Worker.EvacReturnState;
-        this.safe = false;
+        this.worker.safe = false;
         this.requestedState = state;
       },
+
+      getStatusText: function() {
+        if (this.worker.safe) {
+          return "Safe";
+        } else {
+          var evacTime = this.evacTimer / this.worker.currentRegion.efficiency;
+          return "Evacuating: " + Math.floor(10.0 * evacTime) / 10.0;
+        }
+      }
     });
 
 
@@ -101,7 +118,7 @@ createStateType('EvacReturn',
     {
       update: function(dt) {
         if (this.evacTimer > 0.0) {
-          this.evacTimer -= dt * this.currentRegion.efficiency;
+          this.evacTimer -= dt * this.worker.currentRegion.efficiency;
         } else {
           this.evacTimer = 0.0;
           this.nextState = this.requestedState;
@@ -115,6 +132,11 @@ createStateType('EvacReturn',
           this.requestedState = state;
         }
       },
+
+      getStatusText: function() {
+        var evacTime = this.evacTimer / this.worker.currentRegion.efficiency;
+        return "Returning: " + Math.floor(10.0 * evacTime) / 10.0;
+      }
     });
 
 createStateType('Build',
@@ -125,6 +147,10 @@ createStateType('Build',
       update: function(dt) {
         // TODO: Add building
       },
+
+      getStatusText: function() {
+        return "Buildling"
+      }
     });
 
 module.exports = Worker;
