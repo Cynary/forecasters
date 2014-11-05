@@ -26,8 +26,15 @@ create: function() {
     this.game.add.text(0,550,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
     this.game.add.text(200,550,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
     this.game.add.text(400,550,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
-    this.game.add.text(0,510,"Probabilities of disaster", {font: "20px Arial", fill: "#ffffff", align: "center"})
-  ];
+    this.game.add.text(0,510,"Probabilities of disaster approaching, or hitting", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(0,450,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(200,450,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(400,450,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(0,480,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(200,480,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(400,480,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(0,420,"Rainfall predictions", {font: "20px Arial", fill: "#ffffff", align: "center"})
+];
 
   this.weather = new Weather();
   this.frame = 0;
@@ -70,7 +77,7 @@ update: function() {
   {
     var todayRainfall = this.weather.newRainfall();
 
-    if (todayRainfall > 5.0) {
+    if (todayRainfall > 3.0) {
       this.disaster = true;
       this.txtDisaster.text = 'DISASTER';
       this.region1.health -= todayRainfall/100;
@@ -88,6 +95,11 @@ update: function() {
     {
       this.forecastText[Number(day)].text =
         "Day #" + (Number(day)+1) + ": " + (Number(newForecast.disaster[day])*100).toPrecision(2) + "%";
+    }
+    for (var day in newForecast.rain)
+    {
+      this.forecastText[Number(day)+7].text =
+        "Day #" + (Number(day)+1) + ": " + (Number(newForecast.rain[day])*10).toPrecision(3) + " inch";
     }
   }
 }

@@ -114,7 +114,7 @@ WeatherModel.prototype = {
     var probs = {};
     if (state == NORMAL)
     {
-      var disasterProb = .1; // Math.random()
+      var disasterProb = .04; // Math.random()
       probs[NORMAL] = 1-disasterProb;
       probs[DISASTER_FIRST] = disasterProb;
       return probs;
