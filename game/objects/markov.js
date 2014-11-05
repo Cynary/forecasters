@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 function Markov(startState, transition, observation)
 {
@@ -7,20 +7,19 @@ function Markov(startState, transition, observation)
   this.observation = observation;
 }
 
-Markov.prototype =
-{
+Markov.prototype = {
   step: function()
   {
     var stateToProbs = this.transition(this.State);
     var observation = this.observation(this.State);
-    this.state = chooseState(stateToProbs);
+    this.state = this.chooseState(stateToProbs);
     return observation;
   },
 
   chooseState: function(stateToProbs)
   {
     var choice = Math.random();
-    var accum = 0.;
+    var accum = 0;
     for(state in stateToProbs)
     {
       accum += stateToProbs[state];
@@ -29,5 +28,8 @@ Markov.prototype =
         return state;
       }
     }
+    return state;
   }
-}
+};
+
+module.exports = Markov;
