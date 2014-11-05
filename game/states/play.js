@@ -15,8 +15,8 @@ create: function() {
   this.region1 = new Region(this.game);
   this.rv1 = new RegionView(this.game, this.region1, 60, 60);
 
-  this.region2 = new Region(this.game);
-  this.rv2 = new RegionView(this.game, this.region2, 120, 260);
+  //this.region2 = new Region(this.game);
+  //this.rv2 = new RegionView(this.game, this.region2, 120, 260);
 
   this.forecast = new Forecast();
   this.forecastText = [
@@ -38,33 +38,49 @@ create: function() {
   this.losses = 0;
 
   this.txtLosses = this.game.add.text(0, 20, 'Losses ', { font: "20px Arial", fill: "#ffffff", align: "center" });
+
+  this.txtDisaster = this.game.add.text(0, 40, '', { font: "20px Arial", fill: "#ff0000", align: "center" });
 },
 
 update: function() {
   ++this.frame;
   this.region1.update(0.015);
   this.rv1.update();
-  this.region2.update(0.015);
-  this.rv2.update();
+  //this.region2.update(0.015);
+  //this.rv2.update();
+  //
+  var second = Math.floor(1000/this.msPerFrame);
 
-  for (var i in this.region1.workers) {
-    if (!this.region1.workers[i].safe) {
-      this.losses += Math.max(0.0, 0.8 - this.region1.health);
-    }
-  }
-  for (var i in this.region2.workers) {
-    if (!this.region2.workers[i].safe) {
-      this.losses += Math.max(0.0, 0.8 - this.region1.health);
+  if (this.disaster) {
+    for (var i in this.region1.workers) {
+      if (!this.region1.workers[i].safe) {
+        if (this.region1.supplies <= 0) {
+          this.losses += Math.max(0.0, 0.95 - this.region1.health);
+        } else if ((this.frame % second) == 0) {
+          this.region1.supplies -= 1;
+        }
+      }
     }
   }
 
   this.txtVictory.text = 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%';
   this.txtLosses.text = 'Losses ' + Math.floor(this.losses);
 
-  var second = Math.floor(1000/this.msPerFrame);
   if ((this.frame % second) == 0)
   {
     var todayRainfall = this.weather.newRainfall();
+
+    if (todayRainfall > 5.0) {
+      this.disaster = true;
+      this.txtDisaster.text = 'DISASTER';
+      this.region1.health -= todayRainfall/100;
+    } else {
+      this.disaster = false;
+      this.txtDisaster.text = '';
+    }
+
+    console.log("####");
+    console.log(todayRainfall);
     this.forecast.observe(todayRainfall);
     this.forecast.newDay();
     var newForecast = this.forecast.forecast(6);
