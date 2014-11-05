@@ -45,7 +45,6 @@ Forecast.prototype = {
   {
     for (var state in this.stateProbabilities)
     {
-      console.log(this.weather.probObsGivenState(rainfall, state));
       this.stateProbabilities[state] *= this.weather.probObsGivenState(rainfall,state);
     }
     normalize(this.stateProbabilities);

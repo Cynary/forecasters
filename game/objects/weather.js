@@ -41,7 +41,7 @@ Gaussian.prototype = {
 
 var disasterProperties = {
   MAX_RAINFALL: 10,
-  DURATION: 10,
+  DURATION: 50,
   VARIANCE: 1
 };
 
@@ -61,9 +61,9 @@ function disasterRainfallAverage(max,expectedDuration) {
 // Probability that the disaster will end on its dayth day.
 //
 function disasterEndProb(expectedDuration) {
-  var prob = 1./expectedDuration;
+  var prob = 1-1./expectedDuration;
   return function(day) {
-    return Math.pow(1-prob,day-1)*prob;
+    return 1-Math.pow(prob,day-1)*prob;
   };
 }
 
@@ -114,7 +114,7 @@ WeatherModel.prototype = {
     var probs = {};
     if (state == NORMAL)
     {
-      var disasterProb = 1.0; // Math.random()
+      var disasterProb = .1; // Math.random()
       probs[NORMAL] = 1-disasterProb;
       probs[DISASTER_FIRST] = disasterProb;
       return probs;

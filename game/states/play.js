@@ -11,7 +11,7 @@ Play.prototype = {
 
 create: function() {
   //Everything that relates to buildProgress is a temporary patch just to get it in for playtest.
-  this.game.buildProgress = 0
+  this.game.buildProgress = 0;
   this.region1 = new Region(this.game);
   this.rv1 = new RegionView(this.game, this.region1, 60, 60);
 
@@ -19,7 +19,15 @@ create: function() {
   //this.rv2 = new RegionView(this.game, this.region2, 120, 260);
 
   this.forecast = new Forecast();
-  this.forecastText = this.game.add.text(0,550, "Forecast: " + this.forecast.forecast(7), {font: "20px Arial", fill: "#ffffff", align: "center"});
+  this.forecastText = [
+    this.game.add.text(0,530,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(200,530,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(400,530,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(0,550,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(200,550,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(400,550,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
+    this.game.add.text(0,510,"Probabilities of disaster", {font: "20px Arial", fill: "#ffffff", align: "center"})
+  ];
 
   this.weather = new Weather();
   this.frame = 0;
@@ -75,8 +83,12 @@ update: function() {
     console.log(todayRainfall);
     this.forecast.observe(todayRainfall);
     this.forecast.newDay();
-    var newForecast = this.forecast.forecast(7);
-    this.forecastText.text = "Forecast: " + todayRainfall + " " + this.weather.markov.state + " " + this.forecast.forecast(7).rain[0];
+    var newForecast = this.forecast.forecast(6);
+    for (var day in newForecast.disaster)
+    {
+      this.forecastText[Number(day)].text =
+        "Day #" + (Number(day)+1) + ": " + (Number(newForecast.disaster[day])*100).toPrecision(2) + "%";
+    }
   }
 }
 
