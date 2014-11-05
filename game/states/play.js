@@ -56,8 +56,13 @@ update: function() {
   var second = Math.floor(1000/this.msPerFrame);
   if ((this.frame % second) == 0)
   {
-    this.forecastText.text = "Forecast: " + this.forecast.forecast(7);
-    console.dir(this.forecast.forecast(7));
+    var todayRainfall = this.weather.newRainfall();
+    console.log("####");
+    console.log(todayRainfall);
+    this.forecast.observe(todayRainfall);
+    this.forecast.newDay();
+    var newForecast = this.forecast.forecast(7);
+    this.forecastText.text = "Forecast: " + todayRainfall + " " + this.weather.markov.state + " " + this.forecast.forecast(7).rain[0];
   }
 }
 

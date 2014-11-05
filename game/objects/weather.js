@@ -41,7 +41,7 @@ Gaussian.prototype = {
 
 var disasterProperties = {
   MAX_RAINFALL: 10,
-  DURATION: 100,
+  DURATION: 10,
   VARIANCE: 1
 };
 
@@ -95,7 +95,7 @@ WeatherModel.prototype = {
   //
   observation: function(state)
   {
-    return abs(this.distGivenState(Number(state)).sample());
+    return Math.abs(this.distGivenState(Number(state)).sample());
   },
 
   probObsGivenState: function(obs,state)
@@ -103,7 +103,7 @@ WeatherModel.prototype = {
     var dist = this.normalRainfall;
     if (state != NORMAL)
     {
-      var average = this.disaster.average(state);
+      var average = this.disaster.average(Number(state));
       dist = new Gaussian(average, disasterProperties.VARIANCE);
     }
     return dist.pdf(obs) + dist.pdf(-obs);
@@ -114,7 +114,7 @@ WeatherModel.prototype = {
     var probs = {};
     if (state == NORMAL)
     {
-      var disasterProb = 0.01; // Math.random()
+      var disasterProb = 1.0; // Math.random()
       probs[NORMAL] = 1-disasterProb;
       probs[DISASTER_FIRST] = disasterProb;
       return probs;
@@ -134,7 +134,10 @@ WeatherModel.prototype = {
 function Weather()
 {
   this.model = new WeatherModel();
-  this.markov = new Markov(NORMAL, this.model.transition, this.model.observation);
+  var self = this;
+  var _transition = function(state) {return self.model.transition(state);};
+  var _observation = function(state) {return self.model.observation(state);};
+  this.markov = new Markov(NORMAL, _transition, _observation);
 }
 
 Weather.prototype = {

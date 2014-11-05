@@ -10,9 +10,12 @@ function Markov(startState, transition, observation)
 Markov.prototype = {
   step: function()
   {
-    var stateToProbs = this.transition(this.State);
-    var observation = this.observation(this.State);
+    var stateToProbs = this.transition(this.state);
+    var observation = this.observation(this.state);
     this.state = this.chooseState(stateToProbs);
+    console.log("#step$");
+    console.log(this.state);
+    console.log(stateToProbs);
     return observation;
   },
 
@@ -20,7 +23,7 @@ Markov.prototype = {
   {
     var choice = Math.random();
     var accum = 0;
-    for(state in stateToProbs)
+    for(var state in stateToProbs)
     {
       accum += stateToProbs[state];
       if (accum >= choice)

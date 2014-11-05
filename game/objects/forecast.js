@@ -7,12 +7,12 @@ var DISASTER_FIRST = 1;
 
 function normalize(a)
 {
-  z = 0;
-  for (i in a)
+  var z = 0;
+  for (var i in a)
   {
     z += a[i];
   }
-  for (i in a)
+  for (var i in a)
   {
     a[i] /= z;
   }
@@ -45,9 +45,10 @@ Forecast.prototype = {
   {
     for (var state in this.stateProbabilities)
     {
+      console.log(this.weather.probObsGivenState(rainfall, state));
       this.stateProbabilities[state] *= this.weather.probObsGivenState(rainfall,state);
     }
-    normalize(newProbs);
+    normalize(this.stateProbabilities);
   },
 
   forecast: function(days)
