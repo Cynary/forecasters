@@ -54,13 +54,14 @@ createStateType('Gather',
     function(worker, lastState) {
       // Make a call to the super constructor
       Worker.State.call(this, worker, lastState);
-      this.gatherTimer = 2.0;
+      this.GATHER_TIME = 0.8;
+      this.gatherTimer = this.GATHER_TIME;
     },
     {
       update: function(dt) {
         this.gatherTimer -= dt * this.worker.currentRegion.health;
         if (this.gatherTimer <= 0.0) {
-          this.gatherTimer += 2.0;
+          this.gatherTimer += this.GATHER_TIME;
           this.worker.currentRegion.supplies += 1;
         }
       },

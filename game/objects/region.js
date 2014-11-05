@@ -22,7 +22,7 @@ Region.prototype = {
 // Called every frame for a given delta time
 update: function(dt) {
   // Assume some sort of logistic restoration for health.
-  if (this.health > 0.25) {
+  if (this.health >= 0.25) {
     this.health += 0.1 * this.health * (1.0 - this.health) * dt;
   } else {
     this.health = 0.25;
