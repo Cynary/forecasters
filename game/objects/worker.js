@@ -146,7 +146,8 @@ createStateType('Build',
     },
     {
       update: function(dt) {
-        // TODO: Add building
+        var progress = dt * this.worker.currentRegion.efficiency;
+        this.worker.game.buildProgress += progress;
       },
 
       getStatusText: function() {
