@@ -80,6 +80,8 @@ createStateType('Evac',
       } else {
         this.evacTimer = 5.0;
       }
+      this.worker.safe = false;
+      console.log(this.worker.safe);
     },
     {
       update: function(dt) {
