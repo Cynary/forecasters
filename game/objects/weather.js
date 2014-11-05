@@ -63,7 +63,7 @@ function disasterRainfallAverage(max,expectedDuration) {
 function disasterEndProb(expectedDuration) {
   var prob = 1./expectedDuration;
   return function(day) {
-    return 1-Math.pow(1-prob,day-1)*prob;
+    return Math.pow(1-prob,day-1)*prob;
   };
 }
 
@@ -114,7 +114,7 @@ WeatherModel.prototype = {
     var probs = {};
     if (state == NORMAL)
     {
-      var disasterProb = 0.1; // Math.random()
+      var disasterProb = 0.01; // Math.random()
       probs[NORMAL] = 1-disasterProb;
       probs[DISASTER_FIRST] = disasterProb;
       return probs;

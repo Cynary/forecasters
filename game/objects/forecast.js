@@ -38,7 +38,6 @@ Forecast.prototype = {
           transition[nextState]*this.stateProbabilities[state];
       }
     }
-    console.dir(newProbs);
     this.stateProbabilities = newProbs;
   },
 

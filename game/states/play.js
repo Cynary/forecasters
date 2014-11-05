@@ -25,9 +25,12 @@ create: function() {
   this.forecastText = this.game.add.text(0,550, "Forecast: " + this.forecast.forecast(7), {font: "20px Arial", fill: "#ffffff", align: "center"});
 
   this.weather = new Weather();
+  this.frame = 0;
+  this.msPerFrame = 15;
 },
 
 update: function() {
+  ++this.frame;
   this.region1.update(0.015);
   this.rv1.update();
   this.region2.update(0.015);
@@ -35,8 +38,12 @@ update: function() {
 
   this.text.text = 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%';
 
-  this.forecastText.text = "Forecast: " + this.forecast.forecast(7);
-  console.dir(this.forecast.forecast(7));
+  var second = Math.floor(1000/this.msPerFrame);
+  if ((this.frame % second) == 0)
+  {
+    this.forecastText.text = "Forecast: " + this.forecast.forecast(7);
+    console.dir(this.forecast.forecast(7));
+  }
 }
 
 };
