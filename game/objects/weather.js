@@ -121,11 +121,11 @@ WeatherModel.prototype = {
     }
     else
     {
-      var day = state;
-      var nextState = state+1;
+      var day = Number(state);
+      var nextState = Number(state)+1;
       var normalProb = this.disaster.end(state);
       probs[NORMAL] = normalProb;
-      probs[1-normalProb] = 1-normalProb;
+      probs[nextState] = 1-normalProb;
       return probs;
     }
   }
