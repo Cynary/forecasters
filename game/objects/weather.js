@@ -41,7 +41,7 @@ Gaussian.prototype = {
 
 var disasterProperties = {
   MAX_RAINFALL: 10,
-  DURATION: 10,
+  DURATION: 100,
   VARIANCE: 1
 };
 
@@ -95,7 +95,7 @@ WeatherModel.prototype = {
   //
   observation: function(state)
   {
-    return abs(this.distGivenState(state).sample());
+    return abs(this.distGivenState(Number(state)).sample());
   },
 
   probObsGivenState: function(obs,state)
@@ -123,7 +123,7 @@ WeatherModel.prototype = {
     {
       var day = Number(state);
       var nextState = Number(state)+1;
-      var normalProb = this.disaster.end(state);
+      var normalProb = this.disaster.end(day);
       probs[NORMAL] = normalProb;
       probs[nextState] = 1-normalProb;
       return probs;

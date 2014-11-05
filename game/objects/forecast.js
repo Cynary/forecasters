@@ -21,7 +21,7 @@ function normalize(a)
 function Forecast() {
   this.stateProbabilities = { 0 /*NORMAL*/: 1.0 };
   this.weather = new Weather().getModel();
-  this.epsilon = 0.01;
+  this.epsilon = 0.0001;
 }
 
 Forecast.prototype = {
@@ -34,10 +34,11 @@ Forecast.prototype = {
       for (var nextState in transition)
       {
         newProbs[nextState] =
-          ((nextState in newProbs) ? 0:newProbs[nextState]) +
+          ((nextState in newProbs) ? newProbs[nextState]:0) +
           transition[nextState]*this.stateProbabilities[state];
       }
     }
+    console.dir(newProbs);
     this.stateProbabilities = newProbs;
   },
 
@@ -63,7 +64,6 @@ Forecast.prototype = {
       for (var state in this.stateProbabilities)
       {
         rain[day] += this.stateProbabilities[state]*this.weather.distGivenState(state).mean;
-        console.dir(this.stateProbabilities);
       }
       ++day;
       this.newDay();
