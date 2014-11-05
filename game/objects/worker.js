@@ -58,7 +58,7 @@ createStateType('Gather',
     },
     {
       update: function(dt) {
-        this.gatherTimer -= dt * this.worker.currentRegion.efficiency;
+        this.gatherTimer -= dt * this.worker.currentRegion.health;
         if (this.gatherTimer <= 0.0) {
           this.gatherTimer += 2.0;
           this.worker.currentRegion.supplies += 1;
@@ -66,7 +66,7 @@ createStateType('Gather',
       },
 
       getStatusText: function() {
-        var gatherTime = this.gatherTimer / this.worker.currentRegion.efficiency;
+        var gatherTime = this.gatherTimer / this.worker.currentRegion.health;
         return "Gathering: " + Math.floor(10.0 * gatherTime) / 10.0;
       }
     });
@@ -85,7 +85,7 @@ createStateType('Evac',
     {
       update: function(dt) {
         if (this.evacTimer > 0.0) {
-          this.evacTimer -= dt * this.worker.currentRegion.efficiency;
+          this.evacTimer -= dt * this.worker.currentRegion.health;
         } else {
           this.evacTimer = 0.0;
           this.worker.safe = true;
@@ -102,7 +102,7 @@ createStateType('Evac',
         if (this.worker.safe) {
           return "Safe";
         } else {
-          var evacTime = this.evacTimer / this.worker.currentRegion.efficiency;
+          var evacTime = this.evacTimer / this.worker.currentRegion.health;
           return "Evacuating: " + Math.floor(10.0 * evacTime) / 10.0;
         }
       }
@@ -119,7 +119,7 @@ createStateType('EvacReturn',
     {
       update: function(dt) {
         if (this.evacTimer > 0.0) {
-          this.evacTimer -= dt * this.worker.currentRegion.efficiency;
+          this.evacTimer -= dt * this.worker.currentRegion.health;
         } else {
           this.evacTimer = 0.0;
           this.nextState = this.requestedState;
@@ -135,7 +135,7 @@ createStateType('EvacReturn',
       },
 
       getStatusText: function() {
-        var evacTime = this.evacTimer / this.worker.currentRegion.efficiency;
+        var evacTime = this.evacTimer / this.worker.currentRegion.health;
         return "Returning: " + Math.floor(10.0 * evacTime) / 10.0;
       }
     });
@@ -146,7 +146,7 @@ createStateType('Build',
     },
     {
       update: function(dt) {
-        var progress = dt * this.worker.currentRegion.efficiency;
+        var progress = dt * this.worker.currentRegion.health;
         this.worker.game.buildProgress += progress;
       },
 

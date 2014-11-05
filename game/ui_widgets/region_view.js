@@ -30,7 +30,7 @@ function RegionView(game, region, x, y) {
 RegionView.prototype = {
 
 update: function() {
-  this.txtHealth.text = 'health: ' + Math.floor(this.region.health) + '%';
+  this.txtHealth.text = 'health: ' + Math.floor(this.region.health*100) + '%';
   this.txtSupplies.text = 'supplies: ' + Math.floor(this.region.supplies);
   for (var i in this.workerViews) {
     this.workerViews[i].update();
@@ -47,19 +47,6 @@ createText: function(name, x, y, text, style) {
   var txt = this.game.add.text(x, y, text, style);
   this['txt' + name] = txt;
   this.uiGroup.add(txt);
-},
-
-// TODO: Make these actions make sense
-gatherOnClick: function() {
-  this.region.supplies += 1;
-},
-
-buildOnClick: function() {
-  this.region.health += 2;
-},
-
-evacOnClick: function() {
-  this.region.health -= 5;
 },
 
 };
