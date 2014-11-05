@@ -39,7 +39,6 @@ update: function() {
   console.dir(this.forecast.forecast(7));
 }
 
-
 };
 
 module.exports = Play;

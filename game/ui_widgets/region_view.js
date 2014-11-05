@@ -1,5 +1,7 @@
 'use strict';
 
+var WorkerView = require('./worker_view.js');
+
 function RegionView(game, region, x, y) {
   this.game = game;
   this.region = region;
@@ -14,12 +16,15 @@ function RegionView(game, region, x, y) {
 
   uiGroup.create(0, 0, 'city');
 
-  this.createButton('Gather', 10, 10, 'fortify', this.gatherOnClick);
-  this.createButton('Build', 60, 10, 'fortify', this.buildOnClick);
-  this.createButton('Evac', 110, 10, 'fortify', this.evacOnClick);
+  this.createText('Health', 160, 10, 'health', { font: "16px Arial", fill: "#000000" });
+  this.createText('Supplies', 160, 32, 'supplies', { font: "16px Arial", fill: "#000000" });
 
-  this.createText('Health', 10, 55, 'health', { font: "16px Arial", fill: "#000000" });
-  this.createText('Supplies', 10, 72, 'supplies', { font: "16px Arial", fill: "#000000" });
+  this.workerViews = new Array(region.workers.length);
+
+  for (var i in region.workers) {
+    this.workerViews[i] = new WorkerView(game, region.workers[i], 0, 55*i);
+    uiGroup.add(this.workerViews[i].uiGroup);
+  }
 }
 
 RegionView.prototype = {
@@ -27,6 +32,9 @@ RegionView.prototype = {
 update: function() {
   this.txtHealth.text = 'health: ' + Math.floor(this.region.health) + '%';
   this.txtSupplies.text = 'supplies: ' + Math.floor(this.region.supplies);
+  for (var i in this.workerViews) {
+    this.workerViews[i].update();
+  }
 },
 
 createButton: function(name, x, y, key, callback) {
