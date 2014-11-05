@@ -59,7 +59,24 @@ Forecast.prototype = {
     do
     {
       rain[day] = 0.;
-      disaster[day] = 1-this.stateProbabilities[NORMAL];
+      var self = this;
+      var probDay = function(day)
+      {
+        if (day in self.stateProbabilities)
+        {
+          var p = 1;
+          for (var x = 0; x < day; ++x)
+          {
+            p -= self.stateProbabilities[x];
+          }
+          return p;
+        }
+        else
+        {
+          return 0.;
+        }
+      };
+      disaster[day] = probDay(7);
       for (var state in this.stateProbabilities)
       {
         rain[day] += this.stateProbabilities[state]*this.weather.distGivenState(state).mean;

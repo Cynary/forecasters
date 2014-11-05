@@ -40,8 +40,8 @@ Gaussian.prototype = {
 };
 
 var disasterProperties = {
-  MAX_RAINFALL: 10,
-  DURATION: 50,
+  MAX_RAINFALL: 20,
+  DURATION: 200,
   VARIANCE: 1
 };
 
@@ -114,7 +114,7 @@ WeatherModel.prototype = {
     var probs = {};
     if (state == NORMAL)
     {
-      var disasterProb = .04; // Math.random()
+      var disasterProb = .2; // Math.random()
       probs[NORMAL] = 1-disasterProb;
       probs[DISASTER_FIRST] = disasterProb;
       return probs;

@@ -77,7 +77,7 @@ update: function() {
   {
     var todayRainfall = this.weather.newRainfall();
 
-    if (todayRainfall > 3.0) {
+    if (todayRainfall > 2.0) {
       this.disaster = true;
       this.txtDisaster.text = 'DISASTER';
       this.region1.health -= todayRainfall/100;
