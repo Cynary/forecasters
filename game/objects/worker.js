@@ -16,11 +16,7 @@ function Worker(game, homeRegion) {
 Worker.prototype = {
 
   // Called every frame for a given delta time
-  update: function(dt) {
-    this.currentState.update(dt);
-    if (this.currentState.nextState != null) {
-      this.currentState = new this.currentState.nextState(this, this.currentState);
-    }
+  nextTurn: function() {
   },
 
 };
@@ -33,7 +29,7 @@ Worker.State = function(worker, lastState) {
   this.nextState = null;
 }
 Worker.State.prototype = {
-  update: function(dt) {},
+  nextTurn: function() {},
   requestState: function(state) { this.nextState = state },
   getStatusText: function() {
     return "Placeholder";
@@ -58,17 +54,11 @@ createStateType('Gather',
       this.gatherTimer = this.GATHER_TIME;
     },
     {
-      update: function(dt) {
-        this.gatherTimer -= dt * this.worker.currentRegion.health;
-        if (this.gatherTimer <= 0.0) {
-          this.gatherTimer += this.GATHER_TIME;
-          this.worker.currentRegion.supplies += 1;
-        }
+      nextTurn: function() {
       },
 
       getStatusText: function() {
-        var gatherTime = this.gatherTimer / this.worker.currentRegion.health;
-        return "Gathering: " + Math.floor(10.0 * gatherTime) / 10.0;
+        return "Placeholder";
       }
     });
 
@@ -84,29 +74,8 @@ createStateType('Evac',
       this.worker.safe = false;
     },
     {
-      update: function(dt) {
-        if (this.evacTimer > 0.0) {
-          this.evacTimer -= dt * this.worker.currentRegion.health;
-        } else {
-          this.evacTimer = 0.0;
-          this.worker.safe = true;
-        }
+      nextTurn: function() {
       },
-
-      requestState: function(state) {
-        this.nextState = Worker.EvacReturnState;
-        this.worker.safe = false;
-        this.requestedState = state;
-      },
-
-      getStatusText: function() {
-        if (this.worker.safe) {
-          return "Safe";
-        } else {
-          var evacTime = this.evacTimer / this.worker.currentRegion.health;
-          return "Evacuating: " + Math.floor(10.0 * evacTime) / 10.0;
-        }
-      }
     });
 
 
@@ -118,27 +87,8 @@ createStateType('EvacReturn',
       this.requestedState = lastState.requestedState
     },
     {
-      update: function(dt) {
-        if (this.evacTimer > 0.0) {
-          this.evacTimer -= dt * this.worker.currentRegion.health;
-        } else {
-          this.evacTimer = 0.0;
-          this.nextState = this.requestedState;
-        }
+      nextTurn: function() {
       },
-
-      requestState: function(state) {
-        if (state == Worker.EvacState) {
-          this.nextState = state;
-        } else {
-          this.requestedState = state;
-        }
-      },
-
-      getStatusText: function() {
-        var evacTime = this.evacTimer / this.worker.currentRegion.health;
-        return "Returning: " + Math.floor(10.0 * evacTime) / 10.0;
-      }
     });
 
 createStateType('Build',
@@ -146,13 +96,11 @@ createStateType('Build',
       Worker.State.call(this, worker, lastState);
     },
     {
-      update: function(dt) {
-        var progress = dt * this.worker.currentRegion.health;
-        this.worker.game.buildProgress += progress;
+      nextTurn: function() {
       },
 
       getStatusText: function() {
-        return "Buildling"
+        return "Building"
       }
     });
 

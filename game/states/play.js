@@ -2,6 +2,7 @@
 
 var Region = require('../objects/region');
 var RegionView = require('../ui_widgets/region_view');
+var TurnView = require('../ui_widgets/turn_view');
 var Weather = require('../objects/weather');
 var Forecast = require('../objects/forecast');
 
@@ -14,6 +15,9 @@ create: function() {
   this.game.buildProgress = 0;
   this.region1 = new Region(this.game);
   this.rv1 = new RegionView(this.game, this.region1, 60, 60);
+
+
+  this.turnView = new TurnView(this.game, this, 300, 300);
 
   //this.region2 = new Region(this.game);
   //this.rv2 = new RegionView(this.game, this.region2, 120, 260);
@@ -33,8 +37,7 @@ create: function() {
     this.game.add.text(0,480,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
     this.game.add.text(200,480,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
     this.game.add.text(400,480,"", {font: "20px Arial", fill: "#ffffff", align: "center"}),
-    this.game.add.text(0,420,"Rainfall predictions", {font: "20px Arial", fill: "#ffffff", align: "center"})
-];
+    this.game.add.text(0,420,"Rainfall predictions", {font: "20px Arial", fill: "#ffffff", align: "center"})];
 
   this.weather = new Weather();
   this.frame = 0;
@@ -47,34 +50,23 @@ create: function() {
   this.txtLosses = this.game.add.text(0, 20, 'Losses ', { font: "20px Arial", fill: "#ffffff", align: "center" });
 
   this.txtDisaster = this.game.add.text(0, 40, '', { font: "20px Arial", fill: "#ff0000", align: "center" });
+
+  this.nextTurnRequested = false;
 },
 
 update: function() {
   ++this.frame;
-  this.region1.update(0.015);
-  this.rv1.update();
-  //this.region2.update(0.015);
-  //this.rv2.update();
-  //
-  var second = Math.floor(1000/this.msPerFrame);
 
-  if (this.disaster) {
-    for (var i in this.region1.workers) {
-      if (!this.region1.workers[i].safe) {
-        if (this.region1.supplies <= 0) {
-          this.losses += Math.max(0.0, 0.95 - this.region1.health);
-        } else if ((this.frame % second) == 0) {
-          this.region1.supplies -= 1;
-        }
-      }
-    }
-  }
+  // Update UIs
+  this.rv1.update();
 
   this.txtVictory.text = 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%';
   this.txtLosses.text = 'Losses ' + Math.floor(this.losses);
 
-  if ((this.frame % second) == 0)
-  {
+  // Update turn
+  if (this.nextTurnRequested) {
+    this.region1.nextTurn();
+
     var todayRainfall = this.weather.newRainfall();
 
     if (todayRainfall > 2.0) {
@@ -101,7 +93,13 @@ update: function() {
       this.forecastText[Number(day)+7].text =
         "Day #" + (Number(day)+1) + ": " + (Number(newForecast.rain[day])*10).toPrecision(3) + " inch";
     }
+    this.nextTurnRequested = false;
   }
+},
+
+requestNextTurn: function() {
+  // Could add more complex turn structure here.
+  this.nextTurnRequested = true;
 }
 
 };
