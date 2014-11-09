@@ -7,7 +7,7 @@ Menu.prototype = {
 
   },
   create: function() {
-    var style = { font: '65px Arial', fill: '#ffffff', align: 'center'};
+    var style = { font: '65px Open Sans Condensed', fill: '#ffffff', align: 'center'};
 
     this.titleText = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 120, 'FBF 1st Playtest', style);
     this.titleText.anchor.setTo(0.5, 0.5);

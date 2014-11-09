@@ -43,7 +43,7 @@ create: function() {
   this.frame = 0;
   this.msPerFrame = 15;
 
-  this.txtVictory = this.game.add.text(0, 0, 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%', { font: "20px Arial", fill: "#ffffff", align: "center" });
+  this.txtVictory = this.game.add.text(0, 0, 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%', { font: "20px Open Sans Condensed", fill: "#ffffff", align: "center" });
 
   this.losses = 0;
 

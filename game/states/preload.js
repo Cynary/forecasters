@@ -17,7 +17,13 @@ Preload.prototype = {
     this.load.image('supplies', 'assets/supplies.png');
     this.load.image('evac', 'assets/evac.png');
     this.load.image('next_turn', 'assets/next_turn.png');
+    
 
+    WebFont.load({
+      google: {
+        families: ['Open Sans Condensed:300']
+      }
+    });
   },
   create: function() {
     this.asset.cropEnabled = false;
