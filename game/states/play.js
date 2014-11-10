@@ -72,7 +72,15 @@ update: function() {
     if (todayRainfall > 2.0) {
       this.disaster = true;
       this.txtDisaster.text = 'DISASTER';
-      this.region1.health -= todayRainfall/100;
+      console.log(this.region1.workers)
+      for(var i=0; i<3; i++){
+        var worker = this.region1.workers[i]
+        if (worker.safe && this.region1.supplies >= 1){
+          this.region1.supplies -= 1;
+        }else{
+          this.region1.health -= todayRainfall/100;
+        }
+      }
     } else {
       this.disaster = false;
       this.txtDisaster.text = '';
