@@ -70,6 +70,10 @@ nextTurn: function() {
         this.region.supplies -= 1;
       }else{
         this.region.health -= todayRainfall/100;
+        if (this.region.health < 0) {
+          this.game.won = false;
+          this.game.state.start('gameover');
+        }
       }
     }
   } else {
