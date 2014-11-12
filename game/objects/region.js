@@ -19,17 +19,31 @@ function Region (game) {
 
 Region.prototype = {
 
-// Called every frame for a given delta time
-update: function(dt) {
-  // Assume some sort of logistic restoration for health.
-  if (this.health >= 0.25) {
-    this.health += 0.1 * this.health * (1.0 - this.health) * dt;
-  } else {
-    this.health = 0.25;
+// Called every turn
+nextTurn: function() {
+  // Do stuff
+  var usedSupplies = 0;
+
+  if (this.health < 1.0) {
+    // Either use 10% of supplies or enough supplies to heal the city, whichever is less
+    usedSupplies = Math.ceil(this.supplies / 10.0);
+    usedSupplies = Math.min(Math.ceil((1.0-this.health)*100/3), usedSupplies)
+
+    this.supplies -= usedSupplies;
+    this.health += 0.03 * usedSupplies;
+    this.health = Math.min(this.health, 1.0);
   }
 
+  var numSupplyWorkers = 0;
   for (var i in this.workers) {
-    this.workers[i].update(dt);
+    this.workers[i].nextTurn();
+    if (this.workers[i].currentState instanceof Worker.GatherState) {
+      numSupplyWorkers++;
+    }
+  }
+
+  if (usedSupplies == 0 && this.supplies > numSupplyWorkers * 10) {
+    this.supplies -= Math.ceil(this.supplies / 10.0);
   }
 },
 
