@@ -32,6 +32,7 @@ update: function() {
 createButton: function(name, x, y, key, callback) {
   var btn = this.game.add.button(x, y, key, callback, this);
   this['btn' + name] = btn;
+  btn.scale.setTo(0.05,0.05);
   this.uiGroup.add(btn);
 },
 
