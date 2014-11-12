@@ -32,6 +32,11 @@ create: function() {
 
 update: function() {
   this.txtVictory.text = 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%';
+  if (Math.floor(this.game.buildProgress / 5.0) >= 20) {
+    // You won!
+    this.game.won = true;
+    this.game.state.start('gameover');
+  }
 //  this.txtLosses.text = 'Losses ' + Math.floor(this.losses);
 
   for (var index in this.regionViews) {
