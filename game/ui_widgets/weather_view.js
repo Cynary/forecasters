@@ -13,21 +13,16 @@ function WeatherView(game, weather, forecast, x, y) {
   uiGroup.x = this.x;
   uiGroup.y = this.y;
 
-// Don't know what was planned, so I'll comment this out and hack for tomorrow
-//  this.createText('Rain', 0, 0, 'rain', { font: "16px Arial", fill: "#ffffff" });
-//  this.createText('State', 0, 20, 'state', { font: "16px Arial", fill: "#ffffff" });
-//  this.createText('Forecast', 0, 40, 'forecast', { font: "12px Arial", fill: "#ffffff" });
-
   // We need a picture here, instead of bunch of geometrical objects
   var graphics = uiGroup.add(game.add.graphics(0, 0));
-  graphics.lineStyle(2, 0xFF0000, 0.7);
+  graphics.lineStyle(1, 0x408c99, 0.5);
   this.w = 320; // width of whole 7 day forecast
   this.h = 30; // height of single line
   this.w1 = 80; // width of rainfall/correctness
   this.days = 6; // amount of days to corecast
   this.w2 = (this.w-this.w1)/this.days; // width of single cell
-  this.fontStyle = { font: "16px Arial", fill: "#ffffff" };
-  this.smallFontStyle = { font: "12px Arial", fill: "#ffffff" };
+  this.fontStyle = { font: "18px Open Sans Condensed", fill: "#ffffff" };
+  this.smallFontStyle = { font: "16px Open Sans Condensed", fill: "#ffffff" };
   graphics.drawRect(0, 0, this.w, this.h);
   this.createText('forecast', this.w/2, this.h/2, this.days+' Day Forecast', this.fontStyle, {x:0.5, y:0.5});
   graphics.drawRect(0, this.h, this.w1, this.h);

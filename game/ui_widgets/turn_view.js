@@ -12,7 +12,9 @@ function TurnView(game, playState, x, y) {
   this.uiGroup.x = this.x;
   this.uiGroup.y = this.y;
 
-  this.createButton('NextTurn', 0, 0, 'next_turn', this.nextTurnOnClick);
+  var btn = this.game.add.button(0, 0, 'next_turn', this.nextTurnOnClick, this, 2, 1, 0);
+  btn.anchor = {x:0.5, y:0.5};
+  this.uiGroup.add(btn);
 }
 
 TurnView.prototype = {

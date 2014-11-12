@@ -19,9 +19,9 @@ function RegionView(game, region, weather, forecast, x, y) {
   sprite.scale.setTo(0.1,0.1);
   uiGroup.add(sprite);
 
-  this.createText('Health', 160, 10, 'health', { font: "16px Arial", fill: "#000000" });
-  this.createText('Supplies', 160, 32, 'supplies', { font: "16px Arial", fill: "#000000" });
-  this.createText('Disaster', 160, 54, '', { font: "20px Arial", fill: "#ff0000", align: "center" });
+  this.createText('Health', 220, 10, 'health', { font: "20px Open Sans Condensed", fill: "#000000" });
+  this.createText('Supplies', 220, 32, 'supplies', { font: "20px Open Sans Condensed", fill: "#000000" });
+  this.createText('Disaster', 220, 54, '', { font: "20px Open Sans Condensed", fill: "#ff0000", align: "center" });
   this.workerViews = new Array(region.workers.length);
 
   for (var i in region.workers) {

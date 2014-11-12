@@ -15,25 +15,24 @@ create: function() {
   this.game.buildProgress = 0;
   this.regionViews = [
     new RegionView(this.game, new Region(this.game), new Weather(), new Forecast(), 60, 60),
-    new RegionView(this.game, new Region(this.game), new Weather(), new Forecast(), 400, 60)
+    new RegionView(this.game, new Region(this.game), new Weather(), new Forecast(), 420, 60)
   ];
 
-  this.turnView = new TurnView(this.game, this, 250, 400);
+  this.turnView = new TurnView(this.game, this, this.game.width/2, 500);
 
-  this.txtVictory = this.game.add.text(0, 0, 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%', { font: "20px Open Sans Condensed", fill: "#ffffff", align: "center" });
+  this.txtVictory = this.game.add.text(this.game.width/2, 5, 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" });
+  this.txtVictory.anchor = {x:0.5, y:0};
 
-  this.losses = 0;
-
-  this.txtLosses = this.game.add.text(0, 20, 'Losses ', { font: "20px Arial", fill: "#ffffff", align: "center" });
-
-  this.txtDisaster = this.game.add.text(0, 40, '', { font: "20px Arial", fill: "#ff0000", align: "center" });
+//  Not needed yet
+//  this.losses = 0;
+//  this.txtLosses = this.game.add.text(0, 25, 'Losses ', { font: "20px Open Sans Condensed", fill: "#ffffff", align: "center" });
 
   this.nextTurnRequested = false;
 },
 
 update: function() {
   this.txtVictory.text = 'Victory progress ' + Math.floor(this.game.buildProgress / 5.0) + '%';
-  this.txtLosses.text = 'Losses ' + Math.floor(this.losses);
+//  this.txtLosses.text = 'Losses ' + Math.floor(this.losses);
 
   for (var index in this.regionViews) {
     var regionView = this.regionViews[index];
