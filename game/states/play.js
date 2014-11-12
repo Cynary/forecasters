@@ -14,8 +14,8 @@ create: function() {
   //Everything that relates to buildProgress is a temporary patch just to get it in for playtest.
   this.game.buildProgress = 0;
   this.regionViews = [
-    new RegionView(this.game, new Region(this.game), new Weather(), new Forecast(), 6, 60, 60),
-    new RegionView(this.game, new Region(this.game), new Weather(), new Forecast(), 1, 420, 60)
+    new RegionView(this.game, new Region(this.game), 'city1', new Weather(), new Forecast(), 6, 60, 60),
+    new RegionView(this.game, new Region(this.game), 'city2', new Weather(), new Forecast(), 1, 420, 60)
   ];
 
   this.turnView = new TurnView(this.game, this, this.game.width/2, 500);

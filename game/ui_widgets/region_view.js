@@ -3,7 +3,7 @@
 var WorkerView = require('./worker_view.js');
 var WeatherView = require('./weather_view.js');
 
-function RegionView(game, region, weather, forecast, daysToForecast, x, y) {
+function RegionView(game, region, cityKey, weather, forecast, daysToForecast, x, y) {
   this.game = game;
   this.region = region;
 
@@ -15,7 +15,7 @@ function RegionView(game, region, weather, forecast, daysToForecast, x, y) {
   uiGroup.x = this.x;
   uiGroup.y = this.y;
 
-  var sprite = game.add.sprite(0, 0, 'city');
+  var sprite = game.add.sprite(0, 0, cityKey);
   uiGroup.add(sprite);
 
   this.createText('Health', 220, 10, 'health', { font: "20px Open Sans Condensed", fill: "#000000" });
