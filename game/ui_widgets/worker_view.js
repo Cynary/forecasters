@@ -48,8 +48,8 @@ nextTurn: function() {
   var txt = this.game.add.text(0,y, cs.getStatusText(), { font: '16px Open Sans Condensed', fill: '#ffffff', align: 'center'});
   txt.anchor.setTo(0.5, 0.5);
   this.uiGroup.add(txt);
-  this.game.add.tween(txt).to({y: -30}, 2500, Phaser.Easing.Linear.None, true);
-  this.game.add.tween(txt).to({alpha: 0}, 2500, Phaser.Easing.Linear.None, true);
+  this.game.add.tween(txt).to({y: -60}, 5000, Phaser.Easing.Linear.None, true);
+  this.game.add.tween(txt).to({alpha: 0}, 5000, Phaser.Easing.Quintic.In, true);
 },
 
 createButton: function(name, x, y, key, callback, frames, anchor) {
