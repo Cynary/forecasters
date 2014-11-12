@@ -16,7 +16,6 @@ function RegionView(game, region, weather, forecast, x, y) {
   uiGroup.y = this.y;
 
   var sprite = game.add.sprite(0, 0, 'city');
-  sprite.scale.setTo(0.1,0.1);
   uiGroup.add(sprite);
 
   this.createText('Health', 220, 10, 'health', { font: "20px Open Sans Condensed", fill: "#000000" });
@@ -25,7 +24,7 @@ function RegionView(game, region, weather, forecast, x, y) {
   this.workerViews = new Array(region.workers.length);
 
   for (var i in region.workers) {
-    this.workerViews[i] = new WorkerView(game, region.workers[i], 0, 55*i);
+    this.workerViews[i] = new WorkerView(game, region.workers[i], (0.3*(Number(i)-1)+0.5)*sprite.width, 140, Number(i));
     uiGroup.add(this.workerViews[i].uiGroup);
   }
 
@@ -59,13 +58,15 @@ createText: function(name, x, y, text, style) {
 nextTurn: function() {
   this.region.nextTurn();
   var todayRainfall = this.weatherView.weather.newRainfall();
-  console.log(todayRainfall);
+  for(var i in this.workerViews){
+    console.log(Number(i), this.workerViews[Number(i)]);
+    this.workerViews[Number(i)].nextTurn();
+  }
   if (todayRainfall > 2.0) {
     // Disaster happened
     this.txtDisaster.text = 'DISASTER';
-    console.log(this.region.workers)
-    for(var i=0; i<3; i++){
-      var worker = this.region.workers[i]
+    for(var i in this.region.workers){
+      var worker = this.region.workers[Number(i)];
       if (worker.safe && this.region.supplies >= 1){
         this.region.supplies -= 1;
       }else{

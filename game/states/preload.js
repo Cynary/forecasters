@@ -13,9 +13,9 @@ Preload.prototype = {
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     this.load.image('city', 'assets/city.png');
-    this.load.image('fortify', 'assets/fortify.png');
-    this.load.image('supplies', 'assets/supplies.png');
-    this.load.image('evac', 'assets/evac.png');
+    this.load.spritesheet('fortify', 'assets/fortify.png', 55, 55);
+    this.load.spritesheet('supplies', 'assets/supplies.png', 55, 55);
+    this.load.spritesheet('evac', 'assets/evac.png', 55, 55);
     this.load.image('person', 'assets/person.png');
     this.load.spritesheet('next_turn', 'assets/next_turn.png', 220, 104);
     

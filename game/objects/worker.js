@@ -70,7 +70,7 @@ createStateType('Gather',
       },
 
       getStatusText: function() {
-        return "Gathering Supply";
+        return "+1 Supply";
       }
     });
 
@@ -99,10 +99,8 @@ createStateType('Evac',
 
         // If the evac hasn't started yet, change states immediately
         if (this.evacTimer == 3) {
-          console.log("a");
           return new state(this.worker, this);
         } else {
-          console.log("b");
           return new Worker.EvacReturnState(this.worker, this);
         }
       },
@@ -110,7 +108,7 @@ createStateType('Evac',
         if (this.worker.safe){
           return 'Safe';
         }
-        return 'Evacuating: ' + Math.ceil(this.evacTimer / this.worker.currentRegion.health) + ' turns left'
+        return 'Evacuating in ' + Math.ceil(this.evacTimer / this.worker.currentRegion.health) + ' days'
       }
     });
 
@@ -139,7 +137,7 @@ createStateType('EvacReturn',
       },
       getStatusText: function() {
         var evacTime = this.evacTimer / this.worker.currentRegion.health;
-        return "Returning: " + Math.ceil(evacTime) + ' turns left';
+        return "Returning in " + Math.ceil(evacTime) + 'days';
       }
     });
 
@@ -154,7 +152,7 @@ createStateType('Build',
       },
 
       getStatusText: function() {
-        return "Buildling"
+        return "+0.5 Victory"
       }
     });
 module.exports = Worker;

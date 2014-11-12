@@ -49,9 +49,6 @@ nextTurn: function(todayRainfall) {
   for (var day in newForecast.rain) {
     this['txt_r'+day].text = (Math.round(newForecast.rain[day]*100)/10) + '"';
   }
-  console.log(newForecast.rain);
-  console.log(newForecast.disaster);
-  console.log("$$");
 },
 
 update: function() {
