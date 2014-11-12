@@ -13,9 +13,6 @@ Markov.prototype = {
     var stateToProbs = this.transition(this.state);
     var observation = this.observation(this.state);
     this.state = this.chooseState(stateToProbs);
-    console.log("#step$");
-    console.log(this.state);
-    console.log(stateToProbs);
     return observation;
   },
 
