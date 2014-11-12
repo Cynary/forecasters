@@ -17,11 +17,18 @@ Worker.prototype = {
 
   // Called every frame for a given delta time
   nextTurn: function() {
+    this.currentState.nextTurn();
     if (this.currentState.nextState){
       this.currentState = new this.currentState.nextState(this, this.currentState)
     }
-    this.currentState.nextTurn();
   },
+
+  requestState: function(state) {
+    var newState = this.currentState.requestState(state);
+    if (newState != null) {
+      this.currentState = newState;
+    }
+  }
 
 };
 
@@ -34,7 +41,9 @@ Worker.State = function(worker, lastState) {
 }
 Worker.State.prototype = {
   nextTurn: function() {},
-  requestState: function(state) { this.nextState = state },
+  requestState: function(state) {
+    return new state(this.worker, this)
+  },
   getStatusText: function() {
     return "Placeholder";
   },
@@ -85,15 +94,23 @@ createStateType('Evac',
         }
       },
       requestState: function(state) {
-        this.nextState = Worker.EvacReturnState;
         this.worker.safe = false;
         this.requestedState = state;
+
+        // If the evac hasn't started yet, change states immediately
+        if (this.evacTimer == 3) {
+          console.log("a");
+          return new state(this.worker, this);
+        } else {
+          console.log("b");
+          return new Worker.EvacReturnState(this.worker, this);
+        }
       },
       getStatusText: function(){
         if (this.worker.safe){
-          return 'safe';
+          return 'Safe';
         }
-        return 'Evacuating: ' + Math.floor(this.evacTimer / this.worker.currentRegion.health) + 'turns left'
+        return 'Evacuating: ' + Math.ceil(this.evacTimer / this.worker.currentRegion.health) + ' turns left'
       }
     });
 
@@ -115,14 +132,14 @@ createStateType('EvacReturn',
       },
       requestState: function(state) {
         if (state == Worker.EvacState) {
-          this.nextState = state;
+          return new state(this.worker, this);
         } else {
           this.requestedState = state;
         }
       },
       getStatusText: function() {
         var evacTime = this.evacTimer / this.worker.currentRegion.health;
-        return "Returning: " + Math.floor(evacTime) + 'turns left';
+        return "Returning: " + Math.ceil(evacTime) + ' turns left';
       }
     });
 

@@ -44,15 +44,15 @@ createText: function(name, x, y, text, style) {
 actionOnClick: function() {
   var cs = this.worker.currentState;
   if (cs instanceof Worker.EvacState || cs instanceof Worker.EvacReturnState) {
-    cs.requestState(this.lastWorkedState);
+    this.worker.requestState(this.lastWorkedState);
   } else {
     if (this.lastWorkedState == Worker.BuildState) {
-      cs.requestState(Worker.GatherState);
+      this.worker.requestState(Worker.GatherState);
       this.lastWorkedState = Worker.GatherState;
       // TODO: Replace loadTexture by having all the buttons on a single spritesheet
       this.btnAction.loadTexture('supplies');
     } else {
-      cs.requestState(Worker.BuildState);
+      this.worker.requestState(Worker.BuildState);
       this.lastWorkedState = Worker.BuildState;
       this.btnAction.loadTexture('fortify');
     }
@@ -62,7 +62,7 @@ actionOnClick: function() {
 evacOnClick: function() {
   var cs = this.worker.currentState;
   if (!(cs instanceof Worker.EvacState)) {
-    cs.requestState(Worker.EvacState);
+    this.worker.requestState(Worker.EvacState);
   }
 },
 
