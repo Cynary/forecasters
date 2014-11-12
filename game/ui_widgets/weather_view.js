@@ -1,6 +1,6 @@
 'use strict';
 
-function WeatherView(game, weather, forecast, x, y) {
+function WeatherView(game, weather, forecast, daysToForecast, x, y) {
   this.game = game;
   this.weather = weather;
   this.forecast = forecast;
@@ -19,7 +19,7 @@ function WeatherView(game, weather, forecast, x, y) {
   this.w = 320; // width of whole 7 day forecast
   this.h = 30; // height of single line
   this.w1 = 80; // width of rainfall/correctness
-  this.days = 6; // amount of days to corecast
+  this.days = daysToForecast; // amount of days to corecast
   this.w2 = (this.w-this.w1)/this.days; // width of single cell
   this.fontStyle = { font: "18px Open Sans Condensed", fill: "#ffffff" };
   this.smallFontStyle = { font: "16px Open Sans Condensed", fill: "#ffffff" };
@@ -47,7 +47,7 @@ nextTurn: function(todayRainfall) {
     this['txt_d'+day].text = (Math.round(newForecast.disaster[day]*100)) + "%";
   }
   for (var day in newForecast.rain) {
-    this['txt_r'+day].text = (Math.round(newForecast.rain[day]*100)/10) + '"';
+    this['txt_r'+day].text = (Math.round(newForecast.rain[day]*10)/10) + '"';
   }
 },
 

@@ -3,7 +3,7 @@
 var WorkerView = require('./worker_view.js');
 var WeatherView = require('./weather_view.js');
 
-function RegionView(game, region, weather, forecast, x, y) {
+function RegionView(game, region, weather, forecast, daysToForecast, x, y) {
   this.game = game;
   this.region = region;
 
@@ -28,7 +28,7 @@ function RegionView(game, region, weather, forecast, x, y) {
     uiGroup.add(this.workerViews[i].uiGroup);
   }
 
-  this.weatherView = new WeatherView(game, weather, forecast, 0, 240);
+  this.weatherView = new WeatherView(game, weather, forecast, daysToForecast, 0, 240);
   uiGroup.add(this.weatherView.uiGroup);
 }
 
@@ -58,6 +58,7 @@ createText: function(name, x, y, text, style) {
 nextTurn: function() {
   this.region.nextTurn();
   var todayRainfall = this.weatherView.weather.newRainfall();
+  console.log(todayRainfall);
   for(var i in this.workerViews){
     console.log(Number(i), this.workerViews[Number(i)]);
     this.workerViews[Number(i)].nextTurn();

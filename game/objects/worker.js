@@ -79,9 +79,9 @@ createStateType('Evac',
       // Make a call to the super constructor
       Worker.State.call(this, worker, lastState);
       if (lastState instanceof Worker.EvacReturnState) {
-        this.evacTimer = 3 - lastState.evacTimer;
+        this.evacTimer = 2 - lastState.evacTimer;
       } else {
-        this.evacTimer = 3;
+        this.evacTimer = 2;
       }
       this.worker.safe = false;
     },
@@ -98,7 +98,7 @@ createStateType('Evac',
         this.requestedState = state;
 
         // If the evac hasn't started yet, change states immediately
-        if (this.evacTimer == 3) {
+        if (this.evacTimer == 2) {
           return new state(this.worker, this);
         } else {
           return new Worker.EvacReturnState(this.worker, this);
@@ -117,7 +117,7 @@ createStateType('EvacReturn',
     function(worker, lastState) {
       // Make a call to the super constructor
       Worker.State.call(this, worker, lastState);
-      this.evacTimer = 3 - lastState.evacTimer;
+      this.evacTimer = 2 - lastState.evacTimer;
       this.requestedState = lastState.requestedState      
     },
     {
