@@ -16,6 +16,7 @@ Preload.prototype = {
     this.load.image('fortify', 'assets/fortify.png');
     this.load.image('supplies', 'assets/supplies.png');
     this.load.image('evac', 'assets/evac.png');
+    this.load.image('person', 'assets/person.png');
     this.load.spritesheet('next_turn', 'assets/next_turn.png', 220, 104);
     
 
