@@ -21,11 +21,21 @@ var WorkerView = Views.createViewType(
     this.imgAnchor = this.uiGroup.create(0, 0, 'person');
     this.imgAnchor.alpha = 0.0;
     this.imgAnchor.anchor.setTo(0.5,1.0);
+
+    this.createText('Status', -25, -100, 'status',
+      { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
+    this.txtStatus.wordWrapWidth = 50;
+    this.oldStatusText = "";
   },
 
   {
 
     update: function() {
+      var cs = this.worker.currentState;
+      if (this.oldStatusText != cs.getStatusText()) {
+        this.oldStatusText = cs.getStatusText();
+        this.txtStatus.text = this.oldStatusText;
+      }
       // Do some sort of region testing here
     },
 
@@ -57,7 +67,7 @@ var WorkerView = Views.createViewType(
       //this.uiGroup.x += this.imgPerson.x;
       //this.uiGroup.y += this.imgPerson.y;
       
-      this.worker.nextRegion = this.closestRegion();
+      this.worker.requestMove(this.closestRegion());
 
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;

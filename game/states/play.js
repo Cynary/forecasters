@@ -25,6 +25,9 @@ create: function() {
     new Region(this.game, 700, 420),
   ];
 
+  // TODO This is kind of a hack
+  Worker.MoveState.regions = this.regions;
+
   this.workers = [];
 
   for (var i in this.regions) {

@@ -18,26 +18,17 @@ function Worker(game, homeRegion) {
   this.currentState = new Worker.GatherState(this, null);
   this.currentRegion = homeRegion;
   this.homeRegion = homeRegion;
-  this.nextRegion = null;
+  this.moveRegion = null;
 }
 
 Worker.prototype = {
 
   // Called every frame for a given delta time
   nextTurn: function() {
-    if (this.nextRegion != null) {
-      // Remove this worker from the current region
-      this.currentRegion.workers = _.without(this.currentRegion.workers, this);
-      this.currentRegion = this.nextRegion;
-      this.nextRegion.workers.push(this);
-      this.nextRegion = null;
-    }
-    /*
     this.currentState.nextTurn();
     if (this.currentState.nextState){
       this.currentState = new this.currentState.nextState(this, this.currentState)
     }
-    */
   },
 
   requestState: function(state) {
@@ -45,6 +36,11 @@ Worker.prototype = {
     if (newState != null) {
       this.currentState = newState;
     }
+  },
+
+  requestMove: function(region) {
+    this.moveRegion = region;
+    this.requestState(Worker.MoveState);
   }
 
 };
@@ -91,71 +87,55 @@ createStateType('Gather',
       }
     });
 
-createStateType('Evac',
+createStateType('Move',
     function(worker, lastState) {
-      // Make a call to the super constructor
       Worker.State.call(this, worker, lastState);
-      if (lastState instanceof Worker.EvacReturnState) {
-        this.evacTimer = 2 - lastState.evacTimer;
-      } else {
-        this.evacTimer = 2;
-      }
-      this.worker.safe = false;
+      // Index of current region
+      this.indCr = _.indexOf(Worker.MoveState.regions, worker.currentRegion);
+      this.indMr = _.indexOf(Worker.MoveState.regions, worker.moveRegion);
     },
     {
       nextTurn: function() {
-        this.evacTimer -= this.worker.currentRegion.health;
-        if (this.evacTimer <= 0){
-          this.evacTimer = 0
-          this.worker.safe = true;
-        }
-      },
-      requestState: function(state) {
-        this.worker.safe = false;
-        this.requestedState = state;
+        var worker = this.worker;
+        var cr = worker.currentRegion;
 
-        // If the evac hasn't started yet, change states immediately
-        if (this.evacTimer == 2) {
-          return new state(this.worker, this);
-        } else {
-          return new Worker.EvacReturnState(this.worker, this);
-        }
-      },
-      getStatusText: function(){
-        if (this.worker.safe){
-          return 'Safe';
-        }
-        return 'Evacuating in ' + Math.ceil(this.evacTimer / this.worker.currentRegion.health) + ' days'
-      }
-    });
+        if (worker.moveRegion != null && worker.moveRegion != worker.currentRegion) {
+          this.indCr = _.indexOf(Worker.MoveState.regions, worker.currentRegion);
+          this.indMr = _.indexOf(Worker.MoveState.regions, worker.moveRegion);
 
+          var indNext = this.indCr;
 
-createStateType('EvacReturn',
-    function(worker, lastState) {
-      // Make a call to the super constructor
-      Worker.State.call(this, worker, lastState);
-      this.evacTimer = 2 - lastState.evacTimer;
-      this.requestedState = lastState.requestedState      
-    },
-    {
-      nextTurn: function() {
-        this.evacTimer -= this.worker.currentRegion.health;
-        if (this.evacTimer <= 0){
-          this.evacTimer = 0
-          this.nextState = this.requestedState
+          if (this.indMr > this.indCr) {
+            indNext += 1;
+          } else {
+            indNext -= 1;
+          }
+
+          var nextRegion = Worker.MoveState.regions[indNext];
+
+          worker.currentRegion.workers = _.without(cr.workers, worker);
+          worker.currentRegion = nextRegion;
+          nextRegion.workers.push(worker);
+        }
+        if (worker.moveRegion == null || worker.moveRegion == worker.currentRegion) {
+          worker.moveRegion = null;
+          // TODO: Come up with an evacuated state
+          worker.requestState(Worker.GatherState);
         }
       },
-      requestState: function(state) {
-        if (state == Worker.EvacState) {
-          return new state(this.worker, this);
-        } else {
-          this.requestedState = state;
-        }
-      },
+
       getStatusText: function() {
-        var evacTime = this.evacTimer / this.worker.currentRegion.health;
-        return "Returning in " + Math.ceil(evacTime) + 'days';
-      }
+        if (this.indMr > this.indCr) {
+          return ">>>";
+        } else {
+          return "<<<";
+        }
+      },
+
+      requestState: function(state) {
+        this.worker.moveRegion = null;
+        return new state(this.worker, this)
+      },
     });
 
 createStateType('Build',
