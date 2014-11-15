@@ -60,11 +60,6 @@ update: function() {
   }
 },
 
-requestNextTurn: function() {
-  // Could add more complex turn structure here.
-  this.nextTurnRequested = true;
-}
-
 };
 
 module.exports = Play;
