@@ -2,7 +2,8 @@
 'use strict';
 function Preload() {
   this.asset = null;
-  this.ready = false;
+  this.loadReady = false;
+  this.fontReady = false;
 }
 
 Preload.prototype = {
@@ -12,18 +13,14 @@ Preload.prototype = {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
-    this.load.image('city1', 'assets/city1.png');
-    this.load.image('city2', 'assets/city2.png');
-    this.load.spritesheet('fortify', 'assets/fortify.png', 55, 55);
-    this.load.spritesheet('supplies', 'assets/supplies.png', 55, 55);
-    this.load.spritesheet('evac', 'assets/evac.png', 55, 55);
-    this.load.image('person', 'assets/person.png');
-    this.load.spritesheet('next_turn', 'assets/next_turn.png', 220, 104);
     
-
+    var that = this;
     WebFont.load({
       google: {
         families: ['Open Sans Condensed:300']
+      },
+      active: function() {
+        that.fontReady = true;
       }
     });
   },
@@ -31,12 +28,13 @@ Preload.prototype = {
     this.asset.cropEnabled = false;
   },
   update: function() {
-    if(!!this.ready) {
+    // Check for this.loadReady as well when you actually start loading assets
+    if(!!this.fontReady) {
       this.game.state.start('menu');
     }
   },
   onLoadComplete: function() {
-    this.ready = true;
+    this.loadReady = true;
   }
 };
 
