@@ -11,6 +11,9 @@ function Worker(game, homeRegion) {
   this.currentState = new Worker.GatherState(this, null);
   this.currentRegion = homeRegion;
   this.homeRegion = homeRegion;
+
+  this.x = homeRegion.x;
+  this.y = homeRegion.y;
 }
 
 Worker.prototype = {
