@@ -18,12 +18,11 @@ create: function() {
   //Everything that relates to buildProgress is a temporary patch just to get it in for playtest.
   this.game.buildProgress = 0;
   this.regions = [
-    new Region(this.game, 60, 400),
-    new Region(this.game, 160, 420),
-    new Region(this.game, 260, 300),
-    new Region(this.game, 360, 250),
-    new Region(this.game, 460, 300),
-    new Region(this.game, 560, 320),
+    new Region(this.game, 100, 400),
+    new Region(this.game, 250, 300),
+    new Region(this.game, 400, 250),
+    new Region(this.game, 550, 300),
+    new Region(this.game, 700, 420),
   ];
 
   this.workers = [];
@@ -33,7 +32,7 @@ create: function() {
     var worker = new Worker(this.game, this.regions[i]);
     this.workers.push(worker);
     this.regions[i].workers.push(worker);
-    new WorkerView(this.game, worker);
+    new WorkerView(this.game, worker, this);
   }
 
   this.turnView = new TurnView(this.game, this, this.game.width/2, 500);
@@ -55,9 +54,17 @@ update: function() {
   Views.update();
 
   if (this.nextTurnRequested) {
+    for (var i in this.workers) {
+      this.workers[i].nextTurn();
+    }
     Views.nextTurn();
     this.nextTurnRequested = false;
   }
+},
+
+requestNextTurn: function() {
+  // Could add more complex turn structure here.
+  this.nextTurnRequested = true;
 },
 
 };

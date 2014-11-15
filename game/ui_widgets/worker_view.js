@@ -5,9 +5,10 @@ var Views = require('./views');
 var _ = require('underscore');
 
 var WorkerView = Views.createViewType(
-  function (game, worker) {
-    Views.call(this, game, worker.x, worker.y);
+  function (game, worker, playState) {
+    Views.call(this, game, worker.currentRegion.x, worker.currentRegion.y);
     this.worker = worker;
+    this.playState = playState;
 
     this.imgPerson = this.uiGroup.create(0, 0, 'person');
     this.imgPerson.anchor.setTo(0.5,1.0);
@@ -25,12 +26,22 @@ var WorkerView = Views.createViewType(
   {
 
     update: function() {
-      //this.uiGroup.x = this.worker.x;
-      //this.uiGroup.y = this.worker.y;
+      // Do some sort of region testing here
     },
 
     nextTurn: function() {
-      //
+      var worker = this.worker;
+      var currentRegion = worker.currentRegion;
+      var crWorkers = currentRegion.workers;
+
+      var nextX = currentRegion.x;
+      var nextY = currentRegion.y;
+
+      var offset = _.indexOf(crWorkers, worker) - (crWorkers.length - 1) * 0.5;
+      nextX += offset * 52;
+
+      this.uiGroup.x = nextX;
+      this.uiGroup.y = nextY;
     },
 
     onDragStart: function(sprite, pointer) {
@@ -42,10 +53,22 @@ var WorkerView = Views.createViewType(
       this.imgAnchor.alpha = 0.0;
       this.imgPerson.alpha = 1.0;
 
-      this.uiGroup.x += this.imgPerson.x;
-      this.uiGroup.y += this.imgPerson.y;
+
+      //this.uiGroup.x += this.imgPerson.x;
+      //this.uiGroup.y += this.imgPerson.y;
+      
+      this.worker.nextRegion = this.closestRegion();
+
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
+    },
+
+    closestRegion: function() {
+      var x = this.uiGroup.x + this.imgPerson.x;
+      var y = this.uiGroup.y + this.imgPerson.y;
+      return _.min(this.playState.regions, function(region) {
+        return (x-region.x)*(x-region.x) + (y-region.y)*(y-region.y);
+      });
     }
   }
 );

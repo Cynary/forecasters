@@ -18,7 +18,7 @@ var RegionView = Views.createViewType(
     },
 
     nextTurn: function() {
-      console.log(this.region.x);
+      //
     },
 
   }

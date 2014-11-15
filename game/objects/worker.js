@@ -1,7 +1,14 @@
 'use strict';
 
+var _ = require('underscore');
+
+var nextWorkerUid = 0;
+
 // Broad worker class
 function Worker(game, homeRegion) {
+  this.workerUid = nextWorkerUid;
+  nextWorkerUid++;
+
   // Utility variables
   this.game = game;
 
@@ -11,19 +18,26 @@ function Worker(game, homeRegion) {
   this.currentState = new Worker.GatherState(this, null);
   this.currentRegion = homeRegion;
   this.homeRegion = homeRegion;
-
-  this.x = homeRegion.x;
-  this.y = homeRegion.y;
+  this.nextRegion = null;
 }
 
 Worker.prototype = {
 
   // Called every frame for a given delta time
   nextTurn: function() {
+    if (this.nextRegion != null) {
+      // Remove this worker from the current region
+      this.currentRegion.workers = _.without(this.currentRegion.workers, this);
+      this.currentRegion = this.nextRegion;
+      this.nextRegion.workers.push(this);
+      this.nextRegion = null;
+    }
+    /*
     this.currentState.nextTurn();
     if (this.currentState.nextState){
       this.currentState = new this.currentState.nextState(this, this.currentState)
     }
+    */
   },
 
   requestState: function(state) {
