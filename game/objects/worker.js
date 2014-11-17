@@ -1,5 +1,13 @@
 'use strict';
 
+function generateName(){
+  var firstNames = ["Matt", "Tony", "Norman", "Rodrigo", "Tsotne", "John", "Eva", "Tricia"];
+  var lastNames = ["Smith", "Johnson", "Jones", "Jackson"];
+  var firstName = firstNames[parseInt(Math.random()*firstNames.length)];
+  var lastName = lastNames[parseInt(Math.random()*lastNames.length)];
+  var name = firstName +" " + lastName;
+  return name
+}
 // Broad worker class
 function Worker(global, homeRegionIndex) {
   this.global = global;
@@ -8,6 +16,7 @@ function Worker(global, homeRegionIndex) {
   this.targetRegionIndex = homeRegionIndex;
   this.building = false;
   this.health = 100;
+  this.name = generateName();
 }
 
 Worker.prototype = {
