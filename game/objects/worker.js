@@ -8,7 +8,6 @@ function Worker(global, homeRegionIndex) {
   this.targetRegionIndex = homeRegionIndex;
   this.building = false;
   this.health = 100;
-  this.status = "+1 Supply";
 }
 
 Worker.prototype = {
@@ -38,21 +37,17 @@ Worker.prototype = {
 
   buildState: function() {
     this.global.increaseBuildProgress(this);
-    this.status = "building";
   },
 
   gatherState: function() {
     this.global.increaseSupply(this);
-    this.status = "+1 Supply";
   },
 
   moveState: function() {
     if (this.currentRegionIndex < this.targetRegionIndex) {
       this.currentRegionIndex++;
-      this.status = ">>>";
     } else if (this.currentRegionIndex > this.targetRegionIndex) {
       this.currentRegionIndex--;
-      this.status = "<<<";
     }
   },
 

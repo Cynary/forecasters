@@ -25,13 +25,17 @@ var WorkerView = Views.createViewType(
       { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
     this.oldStatusText = "";
+
+    this.moving = false;
   },
 
   {
 
     update: function() {
-      this.txtStatus.text = this.worker.status;
       var worker = this.worker;
+      var game = worker.global.game;
+
+      // Check whether or not the worker should move
       var currentRegion = worker.global.regions[worker.currentRegionIndex];
       var crWorkers = currentRegion.workers;
 
@@ -41,8 +45,32 @@ var WorkerView = Views.createViewType(
       var offset = _.indexOf(crWorkers, worker) - (crWorkers.length - 1) * 0.5;
       nextX += offset * 52;
 
-      this.uiGroup.x = nextX;
-      this.uiGroup.y = nextY;
+      if (!this.moving) {
+        if (nextX != this.uiGroup.x || nextY != this.uiGroup.y) {
+          var time = Math.hypot(this.uiGroup.x-nextX,this.uiGroup.y-nextY) * 5;
+          var tween = game.add.tween(this.uiGroup).to({ x: nextX, y: nextY }, time, Phaser.Easing.Quadratic.InOut);
+          tween.onComplete.add(this.onMoveComplete, this);
+          tween.start();
+          this.moving = true;
+        }
+      }
+
+      // Update the worker's status text
+      if (!this.moving) {
+        if (worker.currentRegionIndex < worker.targetRegionIndex) {
+          this.txtStatus.text = ">>>";
+        } else if (worker.currentRegionIndex > worker.targetRegionIndex) {
+          this.txtStatus.text = "<<<";
+        } else if (worker.homeRegionIndex === worker.currentRegionIndex) {
+          if (worker.building) {
+            this.txtStatus.text = "Building";
+          } else {
+            this.txtStatus.text = "Gathering";
+          }
+        } else {
+          this.txtStatus.text = "Evacuated";
+        }
+      }
     },
 
     onDragStart: function(sprite, pointer) {
@@ -56,6 +84,10 @@ var WorkerView = Views.createViewType(
       this.worker.targetRegionIndex = this.closestRegion().regionIndex;
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
+    },
+
+    onMoveComplete: function() {
+      this.moving = false;
     },
 
     closestRegion: function() {
