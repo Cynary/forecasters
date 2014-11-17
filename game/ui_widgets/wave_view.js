@@ -19,13 +19,13 @@ var WaveView = Views.createViewType(
       var waterLevel = this.weather.getCurrentWaterLevel();
 
       this.rad += 0.01;
-      waterLevel += (Math.sin(this.rad)+1)*15;
+      waterLevel += (Math.sin(this.rad))*15;
 
       // 0 level: y = game.height - 200
       // 100 level: y = 100
 
       // Clamp the maximum motion of the wave
-      var wantY = this.weather.global.levelToY(waterLevel);
+      var wantY = this.weather.global.levelToY(waterLevel) - 120;
       var newY = this.lastY + Math.max(Math.min(wantY - this.lastY, 3), -3);
 
       this.wave.y = newY;
