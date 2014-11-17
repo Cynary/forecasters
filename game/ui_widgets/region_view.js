@@ -8,8 +8,9 @@ var RegionView = Views.createViewType(
     Views.call(this, region.global.game, region.x, region.y);
     this.region = region;
 
-    this.imgCity = this.uiGroup.create(0, 0, 'region');
-    this.imgCity.anchor.setTo(0.5, 1.0);
+    this.imgRegion = this.uiGroup.create(-0, 0, 'region');
+    this.imgRegion.scale = {x: 0.25, y: 3};
+    this.imgRegion.anchor.x = 0.5;
 
     this.workerViews = [];
     for(var index in this.region.workers) {
