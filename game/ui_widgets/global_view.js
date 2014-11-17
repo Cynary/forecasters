@@ -3,6 +3,7 @@
 var Views = require('./views');
 var RegionView = require('./region_view');
 var TurnView = require('./turn_view');
+var WaveView = require('./wave_view');
 
 var GlobalView = Views.createViewType(
   function (global) {
@@ -16,6 +17,8 @@ var GlobalView = Views.createViewType(
     }
     // Create TurnView. this.global contains all necessary information
     this.turnView = new TurnView(this.global, this.global.game.width/2, 500);
+
+    this.waveView = new WaveView(this.global.weather);
 
     this.createText("Victory", this.game.width/2, 5, 'Victory progress 0%', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.txtVictory.anchor = {x:0.5, y:0};
@@ -45,6 +48,7 @@ var GlobalView = Views.createViewType(
       for (var regionViewIndex in this.regionViews) {
         this.regionViews[regionViewIndex].update();
       }
+      this.waveView.update();
     },
 
   }

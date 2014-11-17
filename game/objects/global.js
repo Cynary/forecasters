@@ -11,7 +11,7 @@ function Global(game, forecastDays, regionHeights, numWorkersPerRegion) {
   this.game = game;
   this.buildProgress = 0;
   this.supply = 0;
-  this.weather = new WeatherForecast(forecastDays);
+  this.weather = new WeatherForecast(this, forecastDays);
   this.regions = []
   for(var index in regionHeights) {
     this.regions.push(new Region(this, Number(index), regionHeights[index], numWorkersPerRegion));

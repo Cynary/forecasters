@@ -1,7 +1,10 @@
 'use strict';
 
-function WeatherForecast(days) {
-  this.waterLevels = []; // Forecast array. 0th element is the current day (100% correct)
+function WeatherForecast(global, days) {
+  this.global = global;
+  // Forecast array. 0th element is the current day (100% correct)
+  // The levels are from 0 to 100.
+  this.waterLevels = [];
   while(days--) {
   	this.waterLevels.push(0);
   }
