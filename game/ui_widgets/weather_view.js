@@ -39,7 +39,7 @@ function WeatherView(game, weather, forecast, daysToForecast, x, y) {
 
 WeatherView.prototype = {
 
-nextTurn: function(todayRainfall) {
+nextDay: function(todayRainfall) {
   this.forecast.observe(todayRainfall);
   this.forecast.newDay();
   var newForecast = this.forecast.forecast(this.days);

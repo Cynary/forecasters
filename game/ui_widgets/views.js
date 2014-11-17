@@ -14,7 +14,6 @@ function Views(game, x, y) {
 
 Views.prototype = {
   update: function() {},
-  nextTurn: function() {},
 
   // Creates a button called btnname
   createButton: function(name, x, y, key, callback) {
@@ -47,12 +46,6 @@ Views.createViewType = function(ctor, proto) {
 Views.update = function() {
   for (var i in Views.all) {
     Views.all[i].update();
-  }
-}
-
-Views.nextTurn = function() {
-  for (var i in Views.all) {
-    Views.all[i].nextTurn();
   }
 }
 

@@ -5,10 +5,9 @@ var Views = require('./views');
 var _ = require('underscore');
 
 var WorkerView = Views.createViewType(
-  function (game, worker, playState) {
-    Views.call(this, game, worker.currentRegion.x, worker.currentRegion.y);
+  function (worker) {
+    Views.call(this, worker.global.game, worker.global.regions[worker.homeRegionIndex].x, worker.global.regions[worker.homeRegionIndex].y);
     this.worker = worker;
-    this.playState = playState;
 
     this.imgPerson = this.uiGroup.create(0, 0, 'person');
     this.imgPerson.anchor.setTo(0.5,1.0);
@@ -31,21 +30,13 @@ var WorkerView = Views.createViewType(
   {
 
     update: function() {
-      var cs = this.worker.currentState;
-      if (this.oldStatusText != cs.getStatusText()) {
-        this.oldStatusText = cs.getStatusText();
-        this.txtStatus.text = this.oldStatusText;
-      }
-      // Do some sort of region testing here
-    },
-
-    nextTurn: function() {
+      this.txtStatus.text = this.worker.status;
       var worker = this.worker;
-      var currentRegion = worker.currentRegion;
+      var currentRegion = worker.global.regions[worker.currentRegionIndex];
       var crWorkers = currentRegion.workers;
 
-      var nextX = currentRegion.x;
-      var nextY = currentRegion.y;
+      var nextX = worker.global.regions[worker.currentRegionIndex].x;
+      var nextY = worker.global.regions[worker.currentRegionIndex].y;
 
       var offset = _.indexOf(crWorkers, worker) - (crWorkers.length - 1) * 0.5;
       nextX += offset * 52;
@@ -62,13 +53,7 @@ var WorkerView = Views.createViewType(
     onDragStop: function(sprite, pointer) {
       this.imgAnchor.alpha = 0.0;
       this.imgPerson.alpha = 1.0;
-
-
-      //this.uiGroup.x += this.imgPerson.x;
-      //this.uiGroup.y += this.imgPerson.y;
-      
-      this.worker.requestMove(this.closestRegion());
-
+      this.worker.targetRegionIndex = this.closestRegion().regionIndex;
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
     },
@@ -76,7 +61,7 @@ var WorkerView = Views.createViewType(
     closestRegion: function() {
       var x = this.uiGroup.x + this.imgPerson.x;
       var y = this.uiGroup.y + this.imgPerson.y;
-      return _.min(this.playState.regions, function(region) {
+      return _.min(this.worker.global.regions, function(region) {
         return (x-region.x)*(x-region.x) + (y-region.y)*(y-region.y);
       });
     }
