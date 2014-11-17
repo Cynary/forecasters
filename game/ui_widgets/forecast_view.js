@@ -55,7 +55,9 @@ var ForecastView = Views.createViewType(
         }
 
         // Draw the flooding line
-        //graphics.lineStyle();
+        graphics.lineStyle(1, 0xff0000, 1);
+        graphics.moveTo(0, 100-selectedRegion.height);
+        graphics.lineTo(waterLevels.length*25, 100-selectedRegion.height);
 
         this.lastWaterLevels = waterLevels.slice(0);
         this.needsUpdate = false;
