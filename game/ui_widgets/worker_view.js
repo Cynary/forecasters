@@ -105,7 +105,7 @@ var WorkerView = Views.createViewType(
       var x = this.uiGroup.x + this.imgPerson.x;
       var y = this.uiGroup.y + this.imgPerson.y;
       return _.min(this.worker.global.regions, function(region) {
-        return (x-region.x)*(x-region.x) + (y-region.y)*(y-region.y);
+        return (x-region.x)*(x-region.x);
       });
     }
   }

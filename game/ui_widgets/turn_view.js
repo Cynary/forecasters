@@ -14,6 +14,8 @@ function TurnView(global, x, y) {
   var btn = this.global.game.add.button(0, 0, 'next_turn', this.nextTurnOnClick, this, 2, 1, 0);
   btn.anchor = {x:0.5, y:0.5};
   this.uiGroup.add(btn);
+
+  this.nextTurnReady = true;
 }
 
 TurnView.prototype = {
@@ -34,7 +36,11 @@ createText: function(name, x, y, text, style) {
 },
 
 nextTurnOnClick: function() {
-  this.global.nextDay();
+  if (this.nextTurnReady) {
+    this.nextTurnReady = false;
+    this.global.nextDay();
+    this.global.game.time.events.add(600, function() { this.nextTurnReady = true; }, this);
+  }
 },
 
 };
