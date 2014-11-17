@@ -16,6 +16,8 @@ var GlobalView = Views.createViewType(
     for(var index in this.global.regions) {
       this.regionViews.push(new RegionView(this.global.regions[index]));
     }
+
+    
     // Create TurnView. this.global contains all necessary information
     this.turnView = new TurnView(this.global, this.global.game.width/2, 500);
 

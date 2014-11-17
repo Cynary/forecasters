@@ -26,9 +26,7 @@ var WorkerView = Views.createViewType(
     this.createText('Status', -25, -100, 'status',
       { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
-    this.oldStatusText = "";
-    
-    
+    this.oldStatusText = "";    
     this.moving = false;
   },
 
