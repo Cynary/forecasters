@@ -23,6 +23,8 @@ var WorkerView = Views.createViewType(
     this.imgAnchor.alpha = 0.0;
     this.imgAnchor.anchor.setTo(0.5,1.0);
 
+    this.lifebar = this.uiGroup.create(-25,-100,'lifebar');
+
     this.createText('Status', -25, -100, 'status',
       { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
@@ -75,6 +77,7 @@ var WorkerView = Views.createViewType(
           this.txtStatus.text = "Evacuated";
         }
       }
+      this.lifebar.scale.x = this.worker.health*0.01;
     },
 
     onDragStart: function(sprite, pointer) {

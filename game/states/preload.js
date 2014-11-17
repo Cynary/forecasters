@@ -13,6 +13,8 @@ Preload.prototype = {
 
     this.load.image('person', 'assets/person.png');
     this.load.image('wave', 'assets/wave.png');
+    this.load.image('lifebar', 'assets/lifebar.png');
+    this.load.image('region', 'assets/region.jpg');
     this.load.spritesheet('next_turn', 'assets/next_turn.png', 220, 104);
     this.load.spritesheet('region', 'assets/castle-spritesheet.png', 510, 510);
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);

@@ -13,6 +13,10 @@ var RegionView = Views.createViewType(
     this.imgCity.scale.x = 0.2;
     this.imgCity.scale.y = 0.2;
 
+    this.imgRegion = this.uiGroup.create(-0, 0, 'region');
+    this.imgRegion.scale = {x: 0.25, y: 3};
+    this.imgRegion.anchor.x = 0.5;
+
     this.workerViews = [];
     for(var index in this.region.workers) {
       this.workerViews[index] = new WorkerView(this.region.workers[index]);
