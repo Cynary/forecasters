@@ -11,7 +11,6 @@ var WaveView = Views.createViewType(
     this.rad = 0;
 
     this.lastY = 600;
-    this.rising = false;
   },
 
   {
@@ -26,15 +25,11 @@ var WaveView = Views.createViewType(
       // 100 level: y = 100
 
       // Clamp the maximum motion of the wave
-      var wantY = (this.weather.global.game.height - 200) * 0.01*(100-waterLevel) + 100 * 0.01*waterLevel;
+      var wantY = this.weather.global.levelToY(waterLevel) - 120;
       var newY = this.lastY + Math.max(Math.min(wantY - this.lastY, 3), -3);
 
       this.wave.y = newY;
       this.lastY = newY;
-    },
-
-    onRisingComplete: function() {
-      this.rising = false;
     }
   }
 );
