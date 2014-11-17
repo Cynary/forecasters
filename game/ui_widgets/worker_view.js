@@ -17,7 +17,7 @@ var WorkerView = Views.createViewType(
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
     
-    this.imgPerson.events.onInputDown.add(this.changeState, this);
+    this.imgPerson.events.onInputUp.add(this.changeState, this);
 
     this.imgAnchor = this.uiGroup.create(0, 0, 'person');
     this.imgAnchor.alpha = 0.0;
