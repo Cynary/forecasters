@@ -15,7 +15,7 @@ function Region (global, regionIndex, height, numWorkers) {
 
   // TODO: change this once we have normal regions
   this.x = 100+150*regionIndex;
-  this.y = 600-height*5;
+  this.y = this.global.levelToY(height);
 }
 
 Region.prototype = {

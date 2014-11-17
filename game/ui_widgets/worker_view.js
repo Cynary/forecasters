@@ -16,6 +16,8 @@ var WorkerView = Views.createViewType(
 
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
+    
+    this.imgPerson.events.onInputUp.add(this.changeState, this);
 
     this.imgAnchor = this.uiGroup.create(0, 0, 'person');
     this.imgAnchor.alpha = 0.0;
@@ -27,7 +29,10 @@ var WorkerView = Views.createViewType(
       { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
     this.oldStatusText = "";
-
+    
+    this.createText('Name', -20, 0, this.worker.name,
+      { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
+    
     this.moving = false;
   },
 
@@ -91,6 +96,14 @@ var WorkerView = Views.createViewType(
 
     onMoveComplete: function() {
       this.moving = false;
+    },
+    
+    changeState: function(){
+      if (this.worker.building == true){
+        this.worker.building = false;
+      }else if (this.worker.homeRegionIndex === this.worker.currentRegionIndex){
+        this.worker.building = true;
+      }
     },
 
     closestRegion: function() {
