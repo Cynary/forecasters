@@ -13,7 +13,7 @@ var RegionView = Views.createViewType(
     this.imgCity.scale.x = 0.2;
     this.imgCity.scale.y = 0.2;
 
-    this.imgRegion = this.uiGroup.create(-0, 0, 'region');
+    this.imgRegion = this.uiGroup.create(-0, 0, 'regions');
     this.imgRegion.scale = {x: 0.25, y: 3};
     this.imgRegion.anchor.x = 0.5;
 
@@ -29,7 +29,6 @@ var RegionView = Views.createViewType(
       
       if (this.region.global.weather.getCurrentWaterLevel() > this.region.height){
         if (!this.inDanger){
-          console.log('switching')
           this.inDanger = true;
           this.imgCity.loadTexture('region', 1)
         }
