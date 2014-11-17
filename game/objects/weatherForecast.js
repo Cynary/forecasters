@@ -6,13 +6,15 @@ function WeatherForecast(global, days) {
   // The levels are from 0 to 100.
   this.waterLevels = [];
   while(days--) {
-  	this.waterLevels.push(0);
+  	this.waterLevels.push(Math.random() * 100);
   }
 };
 
 WeatherForecast.prototype = {
   nextDay: function() {
-  	// TODO
+    // TODO: Replace with actual weather
+  	this.waterLevels.splice(0, 1);
+    this.waterLevels.push(Math.random() * 100);
   },
 
   getCurrentWaterLevel: function() {
