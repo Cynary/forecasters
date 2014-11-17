@@ -25,12 +25,15 @@ var GlobalView = Views.createViewType(
 
     this.createText("Victory", this.game.width/2, 5, 'Victory progress 0%', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.txtVictory.anchor = {x:0.5, y:0};
+
+    this.createText("Supplies", this.game.width/2, 35, 'Supplies: 0', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" })
   },
 
   {
 
     update: function() {
       this.txtVictory.text = 'Victory progress ' + Math.floor(this.global.buildProgress*10)/10 + '%';
+      this.txtSupplies.text = 'Supplies: ' + this.global.supply;
       // If any worker is in wrong region (maybe (s)he moved) then move the worker
       // and workerView in the correct region before the real update happens
       for (var regionViewIndex in this.regionViews) {
