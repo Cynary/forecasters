@@ -5,6 +5,7 @@ var RegionView = require('./region_view');
 var TurnView = require('./turn_view');
 var WaveView = require('./wave_view');
 var ForecastView = require('./forecast_view');
+var WorkerView = require('./worker_view');
 
 var GlobalView = Views.createViewType(
   function (global) {
@@ -16,7 +17,12 @@ var GlobalView = Views.createViewType(
     for(var index in this.global.regions) {
       this.regionViews.push(new RegionView(this.global.regions[index]));
     }
-
+    for(var index in this.regionViews) {
+      for(var i in this.regionViews[index].region.workers) {
+        this.regionViews[index].workerViews[i] = new WorkerView(this.regionViews[index].region.workers[i]);
+      }
+    }
+    
     
     // Create TurnView. this.global contains all necessary information
     this.turnView = new TurnView(this.global, this.global.game.width/2, 500);

@@ -37,8 +37,7 @@ var WorkerView = Views.createViewType(
 
   {
 
-    update: function() {
-      var worker = this.worker;
+    update: function() {      var worker = this.worker;
       var game = worker.global.game;
 
       // Check whether or not the worker should move

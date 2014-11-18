@@ -18,9 +18,7 @@ var RegionView = Views.createViewType(
     this.imgRegion.anchor.x = 0.5;
 
     this.workerViews = [];
-    for(var index in this.region.workers) {
-      this.workerViews[index] = new WorkerView(this.region.workers[index]);
-    }
+
   },
 
   {
