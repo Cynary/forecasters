@@ -28,16 +28,15 @@ var GlobalView = Views.createViewType(
     
     
     // Create TurnView. this.global contains all necessary information
-    this.turnView = new TurnView(this.global, 130, 70);
+    this.turnView = new TurnView(this.global, this.global.game.width/2, 500);
 
     this.waveView = new WaveView(this.global.weather);
 
-    this.forecastView = new ForecastView(this.global.weather, 550, 25);
+    this.forecastView = new ForecastView(this.global.weather, 550, 5);
 
-    this.createText("Victory", this.game.width/2, 5, 'Victory progress 0%', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" });
-    this.txtVictory.anchor = {x:0.5, y:0};
+    this.createText("Victory", 10, 5, 'Victory progress 0%', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" });
 
-    this.createText("Supplies", this.game.width/2, 35, 'Supplies: 0', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" })
+    this.createText("Supplies", 300, 5, 'Supplies: 0', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" })
   },
 
   {

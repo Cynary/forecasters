@@ -18,11 +18,11 @@ var ForecastView = Views.createViewType(
     this.numTweens = 0;
 
     // Graphics object for the bars on the bar graph
-    this.barG = this.weather.global.game.add.graphics(0,25);
+    this.barG = this.weather.global.game.add.graphics(0,40);
     this.uiGroup.add(this.barG);
 
     // Graphics object for the rest of the bar graph
-    this.graphG = this.weather.global.game.add.graphics(0,25);
+    this.graphG = this.weather.global.game.add.graphics(0,40);
     this.uiGroup.add(this.graphG);
 
     this.createText("Forecast", 0, 0, "Forecast", { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" });
