@@ -37,9 +37,21 @@ var WorkerView = Views.createViewType(
 
   {
 
-    update: function() {      var worker = this.worker;
+    update: function() {
+      var worker = this.worker;
       var game = worker.global.game;
 
+      if (worker.health <= 0) {
+        // Remove the worker view
+        this.imgPerson.visible = false;
+        this.imgAnchor.visible = false;
+        this.lifebar.visible = false;
+        this.txtStatus.visible = false;
+        this.txtName.visible = false;
+        // So that it gets cleaned up from region & regionView
+        worker.dead = true;
+        return;
+      }
       // Check whether or not the worker should move
       var currentRegion = worker.global.regions[worker.currentRegionIndex];
       var crWorkers = currentRegion.workers;

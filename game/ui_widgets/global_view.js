@@ -42,6 +42,7 @@ var GlobalView = Views.createViewType(
     update: function() {
       this.txtVictory.text = 'Victory progress ' + Math.floor(this.global.buildProgress*10)/10 + '%';
       this.txtSupplies.text = 'Supplies: ' + this.global.supply;
+      var numWorkersAlive = 0;
       // If any worker is in wrong region (maybe (s)he moved) then move the worker
       // and workerView in the correct region before the real update happens
       for (var regionViewIndex in this.regionViews) {
@@ -49,7 +50,13 @@ var GlobalView = Views.createViewType(
         var workerViews = regionView.workerViews;
         for (var workerViewIndex in workerViews) {
           var workerView = workerViews[workerViewIndex];
-          if (workerView.worker.currentRegionIndex != regionViewIndex) {
+          numWorkersAlive++;
+          if (workerView.worker.dead) {
+            // Remove worker from the region
+            regionView.workerViews.splice(workerViewIndex, 1);
+            regionView.region.workers.splice(regionView.region.workers.indexOf(workerView.worker), 1);
+            numWorkersAlive--;
+          } else if (workerView.worker.currentRegionIndex != regionViewIndex) {
             // Remove from the old region
             regionView.workerViews.splice(workerViewIndex, 1);
             regionView.region.workers.splice(regionView.region.workers.indexOf(workerView.worker), 1);
@@ -58,6 +65,10 @@ var GlobalView = Views.createViewType(
             this.global.regions[workerView.worker.currentRegionIndex].workers.push(workerView.worker);
           }
         }
+      }
+      if (numWorkersAlive == 0) {
+        this.global.game.won = false;
+        this.game.state.start('gameover');
       }
       for (var regionViewIndex in this.regionViews) {
         this.regionViews[regionViewIndex].update();
