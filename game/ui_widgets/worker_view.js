@@ -9,19 +9,24 @@ var WorkerView = Views.createViewType(
     Views.call(this, worker.global.game, worker.global.regions[worker.homeRegionIndex].x, worker.global.regions[worker.homeRegionIndex].y);
     this.worker = worker;
 
-    this.imgPerson = this.uiGroup.create(0, 0, 'person');
+    this.personKey = 'person' + this.worker.homeRegionIndex;
+
+    this.imgPerson = this.uiGroup.create(0, 0, this.personKey);
     this.imgPerson.anchor.setTo(0.5,1.0);
     this.imgPerson.inputEnabled = true;
     this.imgPerson.input.enableDrag(true);
+    var scale = 50.0 / this.imgPerson.width;
+    this.imgPerson.scale = { x: scale, y: scale };
 
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
     
     this.imgPerson.events.onInputUp.add(this.changeState, this);
 
-    this.imgAnchor = this.uiGroup.create(0, 0, 'person');
+    this.imgAnchor = this.uiGroup.create(0, 0, this.personKey);
     this.imgAnchor.alpha = 0.0;
     this.imgAnchor.anchor.setTo(0.5,1.0);
+    this.imgAnchor.scale = { x: scale, y: scale };
 
     this.lifebar = this.uiGroup.create(-25,-100,'lifebar');
 

@@ -12,6 +12,9 @@ var GlobalView = Views.createViewType(
     Views.call(this, global.game, 0, 0);
     this.global = global;
 
+    this.background = this.uiGroup.create(0, 0, 'background', 0);
+    this.background.scale = { x: 0.5, y: 0.5 };
+
     // Create region views. They will take care of creating WorkerViews recursively
     this.regionViews = [];
     for(var index in this.global.regions) {
