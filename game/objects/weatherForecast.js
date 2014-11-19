@@ -38,7 +38,7 @@ WeatherForecast.prototype = {
     };
 
     for (var i in this.waterLevels) {
-      this.waterLevels[i].mean = clamp(this.waterLevels[i].mean + 2*Math.random()-1);
+      this.waterLevels[i].mean = clamp(this.waterLevels[i].mean + Math.random()*4 - 2);
       this.waterLevels[i].min = clamp(this.waterLevels[i].mean - 2*i);
       this.waterLevels[i].max = clamp(this.waterLevels[i].mean + 2*i);
     }

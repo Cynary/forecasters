@@ -84,6 +84,7 @@ var ForecastView = Views.createViewType(
         btween.start();
 
         this.needsUpdate = false;
+        this.isUpdating = true;
       }
 
       if (this.isUpdating) {
@@ -125,19 +126,21 @@ var ForecastView = Views.createViewType(
     },
 
     drawBar: function(bg, i, level) {
+      i = Math.floor(i);
       // Clear out the old bar
       bg.lineStyle(1, 0x000000, 1);
       bg.beginFill(0x000000, 1);
       bg.drawRect((i+1)*25, 0, 25, 100);
 
       // Draw the new bar
-      bg.lineStyle(1, 0x77aaff, 1);
-      bg.beginFill(0x77aaff, 1)
-      bg.drawRect((i+1)*25, 100-Math.ceil(level.mean), 25, Math.ceil(level.mean));
-
       bg.lineStyle(1, 0x5577ff, 1);
       bg.beginFill(0x5577ff, 1)
+      bg.drawRect((i+1)*25, 100-level.mean, 25, level.mean);
+
+      bg.lineStyle(1, 0x77aaff, 1);
+      bg.beginFill(0x77aaff, 1)
       bg.drawRect((i+1)*25, 100-level.max, 25, level.max-level.min);
+
     },
 
     onUpdateStart: function() {
