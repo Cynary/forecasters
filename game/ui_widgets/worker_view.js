@@ -31,12 +31,12 @@ var WorkerView = Views.createViewType(
     this.lifebar = this.uiGroup.create(-25,-100,'lifebar');
 
     this.createText('Status', -25, -100, 'status',
-      { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
+      { font: "12px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
     this.oldStatusText = "";
     
     this.createText('Name', -20, 0, this.worker.name,
-      { font: "12px Open Sans Condensed", fill: "#ffffff", align: "center" });
+      { font: "12px Open Sans Condensed", fill: "#408c99", align: "center" });
         this.moving = false;
   },
 

@@ -18,12 +18,14 @@ var ForecastView = Views.createViewType(
     this.numTweens = 0;
 
     // Graphics object for the bars on the bar graph
-    this.barG = this.weather.global.game.add.graphics(0,0);
+    this.barG = this.weather.global.game.add.graphics(0,25);
     this.uiGroup.add(this.barG);
 
     // Graphics object for the rest of the bar graph
-    this.graphG = this.weather.global.game.add.graphics(0,0);
+    this.graphG = this.weather.global.game.add.graphics(0,25);
     this.uiGroup.add(this.graphG);
+
+    this.createText("Forecast", 0, 0, "Forecast", { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" });
   },
 
   {
@@ -106,7 +108,21 @@ var ForecastView = Views.createViewType(
         return (mx-region.x)*(mx-region.x);
       });
 
-      if (selectedRegion.regionIndex != this.lastSelectedRegionIndex) {
+      if (Math.abs(my-selectedRegion.y+50) > 100) {
+        selectedRegion = null;
+      }
+
+      if (selectedRegion == null) {
+        this.lastSelectedRegionIndex = -1;
+
+        gg.clear();
+
+        // Draw blocky things
+        gg.lineStyle(1, 0x000000, 1);
+        gg.beginFill(0x000000, 1);
+        gg.drawRect(0, 0, 25, 100);
+        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
+      } else if (selectedRegion.regionIndex != this.lastSelectedRegionIndex) {
         this.lastSelectedRegionIndex = selectedRegion.regionIndex;
 
         gg.clear();

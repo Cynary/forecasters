@@ -32,7 +32,7 @@ var GlobalView = Views.createViewType(
 
     this.waveView = new WaveView(this.global.weather);
 
-    this.forecastView = new ForecastView(this.global.weather, 550, 50);
+    this.forecastView = new ForecastView(this.global.weather, 550, 25);
 
     this.createText("Victory", this.game.width/2, 5, 'Victory progress 0%', { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.txtVictory.anchor = {x:0.5, y:0};
