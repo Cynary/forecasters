@@ -46,6 +46,7 @@ Global.prototype = {
   decreaseSupply: function(worker) {
     // Currently it doesn't depend on worker, but it may in the future
     this.supply -= 1;
+    this.supply = Math.max(0, this.supply);
   },
 
   levelToY: function(level) {
