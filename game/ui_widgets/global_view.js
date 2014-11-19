@@ -25,7 +25,7 @@ var GlobalView = Views.createViewType(
     
     
     // Create TurnView. this.global contains all necessary information
-    this.turnView = new TurnView(this.global, this.global.game.width/2, 500);
+    this.turnView = new TurnView(this.global, 130, 70);
 
     this.waveView = new WaveView(this.global.weather);
 

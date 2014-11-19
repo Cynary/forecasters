@@ -7,13 +7,8 @@ var WaveView = Views.createViewType(
     Views.call(this, weather.global.game, 0, 0);
     this.weather = weather;
     this.wave = this.uiGroup.create(0, 0, 'wave');
-    this.waterLine = this.uiGroup.create(0,0,'line');
-    this.waterLine.scale.y =.1;
-    // This is a hack for wave demo
     this.rad = 0;
-
     this.lastY = 600;
-    this.oldWaterLine = 600;
   },
 
   {
@@ -21,16 +16,8 @@ var WaveView = Views.createViewType(
       this.wave.x = (this.wave.x-1)%100;
       var waterLevel = this.weather.getCurrentWaterLevel();
 
-      var wantWaterLine = this.weather.global.levelToY(waterLevel); 
-      var newWaterLine = this.oldWaterLine + Math.max(Math.min(wantWaterLine - this.oldWaterLine, 3), -3);
-      this.waterLine.y = newWaterLine;
-      this.oldWaterLine = newWaterLine;
-
       this.rad += 0.03;
       waterLevel += (Math.sin(this.rad))*1;
-
-      // 0 level: y = game.height - 200
-      // 100 level: y = 100
 
       // Clamp the maximum motion of the wave
       var wantY = this.weather.global.levelToY(waterLevel) - 126;
