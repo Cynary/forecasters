@@ -37,7 +37,11 @@ Worker.prototype = {
     } else {
       // Otherwise, (s)he'll decrease supply and move left or right
       this.building = false;
+      if (this.global.supply <= 0){
+        this.health -= 10;
+      }
       this.global.decreaseSupply(this);
+
     }
     if (this.currentRegionIndex != this.targetRegionIndex) {
       this.moveState();
