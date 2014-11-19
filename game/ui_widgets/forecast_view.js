@@ -8,6 +8,8 @@ var ForecastView = Views.createViewType(
     Views.call(this, weather.global.game, x, y);
     this.weather = weather;
 
+    var game = weather.global.game;
+
     // Note: updating every frame has performance issues, so this makes it less slow.
     this.needsUpdate = true;
     this.isUpdating = false;
@@ -18,14 +20,23 @@ var ForecastView = Views.createViewType(
     this.numTweens = 0;
 
     // Graphics object for the bars on the bar graph
-    this.barG = this.weather.global.game.add.graphics(0,40);
+    this.barG = game.add.graphics(0,40);
     this.uiGroup.add(this.barG);
 
     // Graphics object for the rest of the bar graph
-    this.graphG = this.weather.global.game.add.graphics(0,40);
+    this.graphG = game.add.graphics(0,40);
     this.uiGroup.add(this.graphG);
 
-    this.createText("Forecast", 0, 0, "Forecast", { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" });
+    var textStyle = { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" };
+
+    // Graphics object for the water level prediction
+    this.lineG = game.add.graphics(0,0);
+    this.txtMax = game.add.text(25, 0, "predicted high", textStyle);
+    this.txtMax.visible = false;
+    this.txtMin = game.add.text(25, 0, "predicted low", textStyle);
+    this.txtMin.visible = false;
+
+    this.createText("Forecast", 0, 0, "Forecast", textStyle);
   },
 
   {
@@ -103,7 +114,8 @@ var ForecastView = Views.createViewType(
 
       var mx = game.input.mousePointer.x;
       var my = game.input.mousePointer.y;
-      // Check if city selection has changed
+
+      // Check if city selection has changed and draw forecast line
       var selectedRegion = _.min(this.weather.global.regions, function(region) {
         return (mx-region.x)*(mx-region.x);
       });
@@ -139,10 +151,37 @@ var ForecastView = Views.createViewType(
         gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       }
 
+      var lg = this.lineG;
+
+      // Draw forecast line on screen if hovering over bar chart
+      var bpos = this.toLocal(bg, {x: mx, y: my});
+      if (bpos.x >= 50 && bpos.x < this.waterLevels.length*25+25 && bpos.y >= 0 && bpos.y <= 100) {
+        var i = Math.floor((bpos.x-25)/25);
+
+        lg.clear();
+        lg.lineStyle(5, 0x408c99, 0.5);
+        lg.moveTo(0, this.weather.global.levelToY(this.waterLevels[i].max));
+        lg.lineTo(800, this.weather.global.levelToY(this.waterLevels[i].max));
+        lg.moveTo(0, this.weather.global.levelToY(this.waterLevels[i].min));
+        lg.lineTo(800, this.weather.global.levelToY(this.waterLevels[i].min));
+
+        this.txtMax.y = this.weather.global.levelToY(this.waterLevels[i].max)-25;
+        this.txtMax.text = "high prediction in " + i + " day" + ((i > 1) ? "s" : "");
+        this.txtMax.visible = true;
+        this.txtMin.y = this.weather.global.levelToY(this.waterLevels[i].min)-25;
+        this.txtMin.text = "low prediction in " + i + " day" + ((i > 1) ? "s" : "");
+        this.txtMin.visible = true;
+      } else {
+        lg.clear();
+
+        this.txtMax.visible = false;
+        this.txtMin.visible = false;
+      }
     },
 
     drawBar: function(bg, i, level) {
       i = Math.floor(i);
+
       // Clear out the old bar
       bg.lineStyle(1, 0x000000, 1);
       bg.beginFill(0x000000, 1);
@@ -150,11 +189,11 @@ var ForecastView = Views.createViewType(
 
       // Draw the new bar
       bg.lineStyle(1, 0x5577ff, 1);
-      bg.beginFill(0x5577ff, 1)
+      bg.beginFill(0x5577ff, 1);
       bg.drawRect((i+1)*25, 100-level.mean, 25, level.mean);
-
+      // Uncertainty bar
       bg.lineStyle(1, 0x77aaff, 1);
-      bg.beginFill(0x77aaff, 1)
+      bg.beginFill(0x77aaff, 1);
       bg.drawRect((i+1)*25, 100-level.max, 25, level.max-level.min);
 
     },
@@ -170,6 +209,17 @@ var ForecastView = Views.createViewType(
         this.isUpdating = false;
         this.numTweens = 0;
       }
+    },
+
+    toLocal: function(obj, pos) {
+      var o = obj;
+      var p = _.clone(pos);
+      while (o != null) {
+        p.x -= o.x;
+        p.y -= o.y;
+        o = o.parent;
+      }
+      return p;
     }
   }
 );
