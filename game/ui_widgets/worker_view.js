@@ -31,7 +31,7 @@ var WorkerView = Views.createViewType(
     this.lifebar = this.uiGroup.create(-25,-100,'lifebar');
 
     this.createText('Status', -25, -100, 'status',
-      { font: "12px Open Sans Condensed", fill: "#408c99", align: "center" });
+      { font: "16px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
     this.oldStatusText = "";
     
@@ -80,9 +80,9 @@ var WorkerView = Views.createViewType(
       // Update the worker's status text
       if (!this.moving) {
         if (worker.currentRegionIndex < worker.targetRegionIndex) {
-          this.txtStatus.text = ">>>";
+          this.txtStatus.text = "Moving >>";
         } else if (worker.currentRegionIndex > worker.targetRegionIndex) {
-          this.txtStatus.text = "<<<";
+          this.txtStatus.text = "<< Moving";
         } else if (worker.homeRegionIndex === worker.currentRegionIndex) {
           if (worker.building) {
             this.txtStatus.text = "Building";
@@ -92,6 +92,7 @@ var WorkerView = Views.createViewType(
         } else {
           this.txtStatus.text = "Evacuated";
         }
+        this.txtStatus.x = -this.txtStatus.width * 0.5;
       }
       this.lifebar.scale.x = this.worker.health*0.01;
     },
