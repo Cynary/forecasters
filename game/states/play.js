@@ -8,7 +8,7 @@ function Play() {}
 Play.prototype = {
 
 create: function() {
-  this.global = new Global(this.game, 7, [25,110,75,35,60], 1);
+  this.global = new Global(this.game, 7, [35,110,85,45,70], 1);
   this.globalView = new GlobalView(this.global);
 },
 
