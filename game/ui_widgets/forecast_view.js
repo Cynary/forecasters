@@ -168,7 +168,7 @@ var ForecastView = Views.createViewType(
         this.txtMax.y = this.weather.global.levelToY(this.waterLevels[i].max)-25;
         this.txtMax.text = "high prediction in " + i + " day" + ((i > 1) ? "s" : "");
         this.txtMax.visible = true;
-        this.txtMin.y = this.weather.global.levelToY(this.waterLevels[i].min)-25;
+        this.txtMin.y = this.weather.global.levelToY(this.waterLevels[i].min)-10;
         this.txtMin.text = "low prediction in " + i + " day" + ((i > 1) ? "s" : "");
         this.txtMin.visible = true;
       } else {
