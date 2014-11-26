@@ -28,13 +28,15 @@ var ForecastView = Views.createViewType(
     this.uiGroup.add(this.graphG);
 
     var textStyle = { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" };
-
+    var regionHeightStyle = { font: "12px Open Sans Condensed", fill: "#FF0000", align: "center" };
     // Graphics object for the water level prediction
     this.lineG = game.add.graphics(0,0);
     this.txtMax = game.add.text(25, 0, "predicted high", textStyle);
     this.txtMax.visible = false;
     this.txtMin = game.add.text(25, 0, "predicted low", textStyle);
     this.txtMin.visible = false;
+    this.createText("RegionHeight", 25, 0, "Castle Height", regionHeightStyle);
+    this.txtRegionHeight.visible = false;
 
     this.createText("Forecast", 0, 0, "Forecast", textStyle);
   },
@@ -125,6 +127,7 @@ var ForecastView = Views.createViewType(
       }
 
       if (selectedRegion == null) {
+        this.txtRegionHeight.visible=false;
         this.lastSelectedRegionIndex = -1;
 
         gg.clear();
@@ -143,6 +146,9 @@ var ForecastView = Views.createViewType(
         gg.lineStyle(1, 0xff0000, 1);
         gg.moveTo(25, 100-selectedRegion.height);
         gg.lineTo(this.waterLevels.length*25+25, 100-selectedRegion.height);
+        this.txtRegionHeight.y = 120-selectedRegion.height;
+        this.txtRegionHeight.visible=true;
+
 
         // Draw blocky things
         gg.lineStyle(1, 0x000000, 1);
