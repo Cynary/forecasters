@@ -27,6 +27,8 @@ Preload.prototype = {
 
     this.load.image('background', 'assets/backgroundbeach.png');
 
+    this.load.image('point', 'assets/point.png');
+
     this.load.image('person0', 'assets/bear.png');
     this.load.image('person1', 'assets/bobble.png');
     this.load.image('person2', 'assets/dinosaur.png');
