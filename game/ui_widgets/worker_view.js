@@ -21,7 +21,7 @@ var WorkerView = Views.createViewType(
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
     
-    this.imgPerson.events.onInputUp.add(this.changeState, this);
+    this.imgPerson.events.onInputUp.add(this.onClick, this);
 
     this.imgAnchor = this.uiGroup.create(0, 0, this.personKey);
     this.imgAnchor.alpha = 0.0;
@@ -37,7 +37,10 @@ var WorkerView = Views.createViewType(
     
     this.createText('Name', -20, 0, this.worker.name,
       { font: "12px Open Sans Condensed", fill: "#408c99", align: "center" });
-        this.moving = false;
+    this.moving = false;
+    this.lastClick = 0;
+    this.isSingleClick = {};
+    this.double_click_delay = 500;
   },
 
   {
@@ -114,6 +117,29 @@ var WorkerView = Views.createViewType(
       this.moving = false;
     },
     
+    onClick: function() {
+      var lastClick = (new Date).getTime();
+      if (lastClick - this.lastClick < this.double_click_delay) {
+        // double click
+        this.changeState();
+        delete this.isSingleClick[this.lastClick];
+        this.lastClick = 0;
+      } else {
+        // potential single click
+        this.lastClick = lastClick;
+        this.isSingleClick[lastClick] = true;
+        setTimeout(function(){this.animatePath(lastClick);}.bind(this), this.double_click_delay + 10);
+      }
+    },
+
+    animatePath: function(clickTime) {
+      if (this.isSingleClick.hasOwnProperty(clickTime)) {
+        // This means the last click wasn't followed by another click,
+        // therefore double-click didn't happen, and we can start animating path.
+        delete this.isSingleClick[clickTime];
+      }
+    },
+
     changeState: function(){
       if (this.worker.building == true){
         this.worker.building = false;
