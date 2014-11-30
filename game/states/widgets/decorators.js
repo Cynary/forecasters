@@ -23,6 +23,36 @@ module.exports = {
   },
 
   fadeOutTweenComplete: function(target) {
-    this.game.state.start('play');
-  }
+    this.game.state.start(target);
+  },
+
+  addWave: function(state) {
+    state.wave = state.game.add.sprite(0, 600, 'wave');
+    state.rad = 0;
+    state.lastY = 600;
+  },
+
+  updateWave: function(state, waterLevel, speed) {
+    speed = speed || 3;
+
+    state.wave.x = (state.wave.x-1)%100;
+
+    state.rad += 0.03;
+    waterLevel += (Math.sin(state.rad))*1;
+
+    var maxChange = state.transitioning ? 5 : 3;
+
+    // Clamp the maximum motion of the wave
+    var wantY = this.levelToY(state, waterLevel) - 126;
+    var newY = state.lastY + Math.max(Math.min(wantY - state.lastY, speed), -speed);
+
+    state.wave.y = newY;
+    state.lastY = newY;
+  },
+
+  // TODO Move this back to it's proper location in global.js
+  levelToY: function(state, level) {
+    // ranges from 0 to 100
+    return (state.game.height - 200) * 0.01*(100-level) + 100 * 0.01*level + 120;
+  },
 };
