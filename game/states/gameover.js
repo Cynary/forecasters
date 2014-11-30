@@ -1,5 +1,6 @@
 
 'use strict';
+var Decorators = require('./widgets/decorators');
 function GameOver() {}
 
 GameOver.prototype = {
@@ -17,6 +18,8 @@ GameOver.prototype = {
 
     this.instructionText = this.game.add.text(this.game.world.centerX, 400, 'Click To Play Again', { font: '28px Open Sans Condensed', fill: '#ffffff', align: 'center'});
     this.instructionText.anchor.setTo(0.5, 0.5);
+
+    Decorators.fadeIn(this);
   },
   update: function () {
     if(this.game.input.activePointer.justPressed()) {

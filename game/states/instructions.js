@@ -22,10 +22,11 @@ Instructions.prototype = {
     Decorators.fadeIn(this);
   },
   update: function() {
-    Decorators.updateWave(this, -20);
+    Decorators.updateWave(this, this.transitioning ? 200 : -20, this.transitioning ? 5 : 3);
 
     if (this.game.input.activePointer.justPressed()) {
       Decorators.fadeOut(this, 'play');
+      this.transitioning = true;
     }
   },
 

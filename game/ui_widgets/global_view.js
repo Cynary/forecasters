@@ -6,11 +6,14 @@ var TurnView = require('./turn_view');
 var WaveView = require('./wave_view');
 var ForecastView = require('./forecast_view');
 var WorkerView = require('./worker_view');
+var Decorators = require('../states/widgets/decorators');
 
 var GlobalView = Views.createViewType(
-  function (global) {
+  function (global, playState) {
     Views.call(this, global.game, 0, 0);
     this.global = global;
+
+    this.playState = playState;
 
     this.background = this.uiGroup.create(0, 0, 'background', 0);
     this.background.scale = { x: 0.5, y: 0.5 };
@@ -68,9 +71,9 @@ var GlobalView = Views.createViewType(
           }
         }
       }
-      if (numWorkersAlive == 0) {
+      if (numWorkersAlive == 3) {
         this.global.game.won = false;
-        this.game.state.start('gameover');
+        Decorators.fadeOut(this.playState, 'gameover');
       }
       for (var regionViewIndex in this.regionViews) {
         this.regionViews[regionViewIndex].update();

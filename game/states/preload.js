@@ -1,5 +1,7 @@
 
 'use strict';
+var Decorators = require('./widgets/decorators');
+
 function Preload() {
   this.asset = null;
   this.loadReady = false;
@@ -56,7 +58,7 @@ Preload.prototype = {
   update: function() {
     // Check for this.loadReady as well when you actually start loading assets
     if(!!this.fontReady) {
-      this.game.state.start('menu');
+      Decorators.fadeOut(this, 'menu');
     }
   },
   onLoadComplete: function() {
