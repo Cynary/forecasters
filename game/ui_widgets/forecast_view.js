@@ -27,6 +27,15 @@ var ForecastView = Views.createViewType(
     this.graphG = game.add.graphics(0,40);
     this.uiGroup.add(this.graphG);
 
+    // Graphics object that masks the bar graph
+    this.maskG = game.add.graphics(25, 40);
+    this.uiGroup.add(this.maskG);
+    this.maskG.beginFill();
+    this.maskG.drawRect(0, 0, 25*this.waterLevels.length, 100);
+    this.maskG.endFill();
+
+    this.barG.mask = this.maskG;
+
     var textStyle = { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" };
     var regionHeightStyle = { font: "12px Open Sans Condensed", fill: "#FF0000", align: "center" };
     // Graphics object for the water level prediction
@@ -52,7 +61,7 @@ var ForecastView = Views.createViewType(
       // Check if water levels have been updated
       if (!this.isUpdating) {
         for (var i in waterLevels) {
-          if (this.waterLevels[i].mean != waterLevels[i].mean) {
+          if (Math.abs(this.waterLevels[i].mean - waterLevels[i].mean) > 0.001) {
             this.needsUpdate = true;
           }
         }
@@ -83,12 +92,6 @@ var ForecastView = Views.createViewType(
           tween.start();
         }
 
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
-
         // Reset the position of the graphics object
         bg.x = 25;
 
@@ -106,12 +109,6 @@ var ForecastView = Views.createViewType(
         for (var i in this.waterLevels) {
           this.drawBar(bg, i, this.waterLevels[i]);
         }
-
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       }
 
       var mx = game.input.mousePointer.x;
@@ -132,11 +129,6 @@ var ForecastView = Views.createViewType(
 
         gg.clear();
 
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       } else if (selectedRegion.regionIndex != this.lastSelectedRegionIndex) {
         this.lastSelectedRegionIndex = selectedRegion.regionIndex;
 
@@ -150,11 +142,6 @@ var ForecastView = Views.createViewType(
         this.txtRegionHeight.visible=true;
 
 
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       }
 
       var lg = this.lineG;
