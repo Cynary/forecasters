@@ -52,16 +52,13 @@ var WorkerView = Views.createViewType(
       var worker = this.worker;
       var game = worker.global.game;
 
-      if (worker.health <= 0) {
-        // Remove the worker view
-        this.imgPerson.visible = false;
-        this.imgAnchor.visible = false;
-        this.lifebar.visible = false;
-        this.txtStatus.visible = false;
-        this.txtName.visible = false;
-        // So that it gets cleaned up from region & regionView
-        worker.dead = true;
-        return;
+      if (worker.health <= 0 && this.moving == false) {
+        worker.health = 0
+        this.moving = true
+        var time = (game.height - this.uiGroup.y) * 5;
+        var tween = game.add.tween(this.uiGroup).to({ x: this.uiGroup.x, y: game.height + 400 }, time, Phaser.Easing.Linear.InOut);
+        tween.onComplete.add(this.onDeathComplete, this);
+        tween.start()
       }
       // Check whether or not the worker should move
       var currentRegion = worker.global.regions[worker.currentRegionIndex];
@@ -106,6 +103,19 @@ var WorkerView = Views.createViewType(
     onDragStart: function(sprite, pointer) {
       this.imgAnchor.alpha = 1.0;
       this.imgPerson.alpha = 0.5;
+    },
+    
+    onDeathComplete: function(){
+        // Remove the worker view
+        this.imgPerson.visible = false;
+        this.imgAnchor.visible = false;
+        this.lifebar.visible = false;
+        this.txtStatus.visible = false;
+        this.txtName.visible = false;
+        this.moving = false;
+        // So that it gets cleaned up from region & regionView
+        this.worker.dead = true;
+        return;
     },
 
     onDragStop: function(sprite, pointer) {
