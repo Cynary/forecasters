@@ -11,10 +11,12 @@ Preload.prototype = {
     this.asset = this.add.sprite(this.width/2,this.height/2, 'preloader');
     this.asset.anchor.setTo(0.5, 0.5);
 
+    this.load.spritesheet('playbutton', 'assets/clicktoplaybutton.png', 376, 66);
+    this.load.image('menubg', 'assets/title screen.png');
+
     this.load.image('wave', 'assets/wave.png');
     this.load.image('line', 'assets/line.png');
     this.load.image('lifebar', 'assets/lifebar.png');
-    this.load.image('regions', 'assets/region.jpg');
     this.load.spritesheet('next_turn', 'assets/next_turn.png', 220, 104);
 
     this.load.image('region0', 'assets/bear castle.png');
