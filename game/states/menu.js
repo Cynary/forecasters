@@ -9,8 +9,6 @@ Menu.prototype = {
 
   },
   create: function() {
-    // TODO: Remove shim
-    this.game.state.start('play');
 
     this.game.add.sprite(0, 0, 'menubg');
 

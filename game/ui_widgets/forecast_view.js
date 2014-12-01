@@ -36,8 +36,8 @@ var ForecastView = Views.createViewType(
 
     this.barG.mask = this.maskG;
 
-    var textStyle = { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" };
-    var regionHeightStyle = { font: "12px Open Sans Condensed", fill: "#FF0000", align: "center" };
+    var textStyle = { font: "24px Architects Daughter", fill: "#408c99", align: "center" };
+    var regionHeightStyle = { font: "12px Architects Daughter", fill: "#FF0000", align: "center" };
     // Graphics object for the water level prediction
     this.lineG = game.add.graphics(0,0);
     this.txtMax = game.add.text(25, 0, "predicted high", textStyle);

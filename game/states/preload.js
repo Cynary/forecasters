@@ -10,6 +10,16 @@ function Preload() {
 
 Preload.prototype = {
   preload: function() {
+    var that = this;
+    WebFont.load({
+      google: {
+        families: ['Architects Daughter']
+      },
+      active: function() {
+        that.fontReady = true;
+      }
+    });
+
     this.asset = this.add.sprite(this.width/2,this.height/2, 'preloader');
     this.asset.anchor.setTo(0.5, 0.5);
 
@@ -47,23 +57,13 @@ Preload.prototype = {
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
-    
-    var that = this;
-    WebFont.load({
-      google: {
-        families: ['Open Sans Condensed:300']
-      },
-      active: function() {
-        that.fontReady = true;
-      }
-    });
   },
   create: function() {
     this.asset.cropEnabled = false;
   },
   update: function() {
     // Check for this.loadReady as well when you actually start loading assets
-    if(!!this.fontReady) {
+    if(!!this.fontReady && !!this.loadReady) {
       Decorators.fadeOut(this, 'menu');
     }
   },

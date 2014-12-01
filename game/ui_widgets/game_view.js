@@ -16,7 +16,7 @@ var GameView = Views.createViewType(
 
     this.nextTurnReady = true;
 
-    var style = { font: "32px Open Sans Condensed", fill: "#408c99", align: "center" };
+    var style = { font: "32px Architects Daughter", fill: "#408c99", align: "center" };
 
     this.createText("Victory", 20, 20, 'Victory progress 0%', style);
     this.createText("Supplies", 20, 60, 'Supplies: 0', style);

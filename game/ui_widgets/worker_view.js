@@ -16,7 +16,6 @@ var WorkerView = Views.createViewType(
     this.imgPerson.inputEnabled = true;
     this.imgPerson.input.enableDrag(true);
     var scale = Math.pow(50.0*50.0*50.0 / (this.imgPerson.width * this.imgPerson.width * this.imgPerson.height), 1/3.0);
-    console.log(scale);
     this.imgPerson.scale = { x: scale, y: scale };
 
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
@@ -32,7 +31,7 @@ var WorkerView = Views.createViewType(
     this.lifebar = this.uiGroup.create(-25,0,'lifebar');
 
     this.createText('Status', -25, -100, 'status',
-      { font: "16px Open Sans Condensed", fill: "#408c99", align: "center" });
+      { font: "16px Architects Daughter", fill: "#408c99", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
     this.oldStatusText = "";
     

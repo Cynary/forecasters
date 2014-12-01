@@ -9,7 +9,7 @@ Instructions.prototype = {
 
   },
   create: function() {
-    var style = { font: '32px Open Sans Condensed', fill: '#ffffff', align: 'center'};
+    var style = { font: '32px Architects Daughter', fill: '#ffffff', align: 'center'};
 
 
     this.instructionsText = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 120, 'Instructions go here; Click anywhere to play', style);
