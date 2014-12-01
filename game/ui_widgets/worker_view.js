@@ -140,51 +140,60 @@ var WorkerView = Views.createViewType(
         // potential single click
         this.lastClick = lastClick;
         this.isSingleClick[lastClick] = true;
-        setTimeout(function(){this.animatePath(lastClick);}.bind(this), this.double_click_delay + 10);
+        setTimeout(function(){
+            if (this.isSingleClick.hasOwnProperty(lastClick)) {
+              // This means the last click wasn't followed by another click,
+              // therefore double-click didn't happen, and we can start animating path.
+              delete this.isSingleClick[lastClick];
+              this.animatePath();
+            }
+          }.bind(this),
+          this.double_click_delay + 10);
       }
     },
 
-    animatePath: function(clickTime) {
-      if (this.isSingleClick.hasOwnProperty(clickTime)) {
-        // This means the last click wasn't followed by another click,
-        // therefore double-click didn't happen, and we can start animating path.
-        delete this.isSingleClick[clickTime];
-        var sign = Math.sign(this.worker.targetRegionIndex-this.worker.currentRegionIndex);
-        var pointCounter = 0;
-        for (var regionIndex = this.worker.currentRegionIndex; regionIndex != this.worker.targetRegionIndex; regionIndex += sign) {
-          var region1 = this.worker.global.regions[regionIndex];
-          var region2 = this.worker.global.regions[regionIndex + sign];
-          for (var point = 0; point < this.pointsNum; point++) {
-            var ratioX = point/this.pointsNum;
-            var ratioY = 0.5*(1-Math.cos(ratioX * Math.PI)); // cos function will make curvy path
-            setTimeout(function(x, y){
-                var pointView = this.worker.global.game.add.sprite(x, y, "point");
-                pointView.scale = {x: 0.2, y:0.2};
-                pointView.anchor.setTo(0.5, 0.5);
-                pointView.alpha = 0;
-                var tween1 = this.worker.global.game.add.tween(pointView).to({alpha: 1}, this.pointAnimationTimeMsecs*this.pointsVisible/2);
-                tween1.onComplete.add(function() {
-                    var tween2 = this.worker.global.game.add.tween(pointView).to({alpha: 0}, this.pointAnimationTimeMsecs*this.pointsVisible/2);
-                    tween2.onComplete.add(function(){pointView.destroy();}, this);
-                    tween2.start();
-                  }, this);
-                tween1.start();
-              }.bind(this),
-              pointCounter * this.pointAnimationTimeMsecs,
-              (1-ratioX)*region1.x + ratioX*region2.x,
-              (1-ratioY)*region1.y + ratioY*region2.y);
-            pointCounter++;
-          }
+    animatePath: function() {
+      var sign = Math.sign(this.worker.targetRegionIndex-this.worker.currentRegionIndex);
+      var pointCounter = 0;
+      for (var regionIndex = this.worker.currentRegionIndex; regionIndex != this.worker.targetRegionIndex; regionIndex += sign) {
+        var region1 = this.worker.global.regions[regionIndex];
+        var region2 = this.worker.global.regions[regionIndex + sign];
+        for (var point = 0; point < this.pointsNum; point++) {
+          var ratioX = point/this.pointsNum;
+          var ratioY = 0.5*(1-Math.cos(ratioX * Math.PI)); // cos function will make curvy path
+          setTimeout(function(x, y){
+              var pointView = this.worker.global.game.add.sprite(x, y, "point");
+              pointView.scale = {x: 0.2, y:0.2};
+              pointView.anchor.setTo(0.5, 0.5);
+              pointView.alpha = 0;
+              var tween1 = this.worker.global.game.add.tween(pointView).to({alpha: 1}, this.pointAnimationTimeMsecs*this.pointsVisible/2);
+              tween1.onComplete.add(function() {
+                  var tween2 = this.worker.global.game.add.tween(pointView).to({alpha: 0}, this.pointAnimationTimeMsecs*this.pointsVisible/2);
+                  tween2.onComplete.add(function(){pointView.destroy();}, this);
+                  tween2.start();
+                }, this);
+              tween1.start();
+            }.bind(this),
+            pointCounter * this.pointAnimationTimeMsecs,
+            (1-ratioX)*region1.x + ratioX*region2.x,
+            (1-ratioY)*region1.y + ratioY*region2.y);
+          pointCounter++;
         }
       }
     },
 
     changeState: function(){
-      this.worker.targetRegionIndex = this.worker.currentRegionIndex;
-      if (this.worker.building == true){
-        this.worker.building = false;
-      }else if (this.worker.homeRegionIndex === this.worker.currentRegionIndex){
-        this.worker.building = true;
+      // If the worker is in a different region, then just show where it is going
+      if (this.worker.currentRegionIndex != this.worker.homeRegionIndex) {
+        this.animatePath();
+      } else {
+        // Otherwise, change the state between gathering <-> building
+        this.worker.targetRegionIndex = this.worker.currentRegionIndex;
+        if (this.worker.building == true){
+          this.worker.building = false;
+        }else if (this.worker.homeRegionIndex === this.worker.currentRegionIndex){
+          this.worker.building = true;
+        }
       }
     },
 
