@@ -43,7 +43,7 @@ module.exports = {
     var maxChange = state.transitioning ? 5 : 3;
 
     // Clamp the maximum motion of the wave
-    var wantY = this.levelToY(state, waterLevel) - 126;
+    var wantY = this.levelToY(state, waterLevel) - 46;
     var newY = state.lastY + Math.max(Math.min(wantY - state.lastY, speed), -speed);
 
     state.wave.y = newY;

@@ -25,7 +25,7 @@ Menu.prototype = {
     Decorators.fadeIn(this);
   },
   update: function() {
-    var waterLevel = this.hovering ? 7 : -20;
+    var waterLevel = this.hovering ? 16 : -24;
     if (this.transitioning) {
       waterLevel = 200;
     }

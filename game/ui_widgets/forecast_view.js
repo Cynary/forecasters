@@ -47,7 +47,7 @@ var ForecastView = Views.createViewType(
     this.createText("RegionHeight", 25, 0, "Castle Height", regionHeightStyle);
     this.txtRegionHeight.visible = false;
 
-    this.createText("Forecast", 0, 0, "Forecast", textStyle);
+    this.createText("Forecast", 40, 40, "Forecast", textStyle);
   },
 
   {
@@ -159,10 +159,10 @@ var ForecastView = Views.createViewType(
         lg.lineTo(800, this.weather.global.levelToY(this.waterLevels[i].min));
 
         this.txtMax.y = this.weather.global.levelToY(this.waterLevels[i].max)-25;
-        this.txtMax.text = "high prediction in " + i + " day" + ((i > 1) ? "s" : "");
+        this.txtMax.text = "high prediction in " + i + " turn" + ((i > 1) ? "s" : "");
         this.txtMax.visible = true;
         this.txtMin.y = this.weather.global.levelToY(this.waterLevels[i].min)-10;
-        this.txtMin.text = "low prediction in " + i + " day" + ((i > 1) ? "s" : "");
+        this.txtMin.text = "low prediction in " + i + " turn" + ((i > 1) ? "s" : "");
         this.txtMin.visible = true;
       } else {
         lg.clear();
@@ -176,17 +176,20 @@ var ForecastView = Views.createViewType(
       i = Math.floor(i);
 
       // Clear out the old bar
-      bg.lineStyle(1, 0x000000, 1);
-      bg.beginFill(0x000000, 1);
+      bg.lineStyle(0, 0xffffff, 1);
+      bg.beginFill(0xffffff, 1);
       bg.drawRect((i+1)*25, 0, 25, 100);
 
+      var loColor = 0x7bced8;
+      var hiColor = 0x35807b;
+
       // Draw the new bar
-      bg.lineStyle(1, 0x5577ff, 1);
-      bg.beginFill(0x5577ff, 1);
+      bg.lineStyle(0, loColor, 1);
+      bg.beginFill(loColor, 1);
       bg.drawRect((i+1)*25, 100-level.mean, 25, level.mean);
       // Uncertainty bar
-      bg.lineStyle(1, 0x77aaff, 1);
-      bg.beginFill(0x77aaff, 1);
+      bg.lineStyle(0, hiColor, 1);
+      bg.beginFill(hiColor, 1);
       bg.drawRect((i+1)*25, 100-level.max, 25, level.max-level.min);
 
     },
