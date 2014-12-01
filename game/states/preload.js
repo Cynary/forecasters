@@ -25,11 +25,12 @@ Preload.prototype = {
 
     this.load.spritesheet('playbutton', 'assets/clicktoplaybutton.png', 376, 66);
     this.load.image('menubg', 'assets/title screen.png');
+    this.load.image('bottombg', 'assets/bottom panel view-01.png');
 
     this.load.image('wave', 'assets/wave.png');
     this.load.image('line', 'assets/line.png');
     this.load.image('lifebar', 'assets/lifebar.png');
-    this.load.spritesheet('next_turn', 'assets/next_turn.png', 220, 104);
+    this.load.spritesheet('next_turn', 'assets/nextturn.png', 134, 40);
 
     this.load.image('region0', 'assets/bear castle.png');
     this.load.image('region1', 'assets/bobble castle.png');

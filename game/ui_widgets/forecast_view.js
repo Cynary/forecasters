@@ -20,15 +20,15 @@ var ForecastView = Views.createViewType(
     this.numTweens = 0;
 
     // Graphics object for the bars on the bar graph
-    this.barG = game.add.graphics(0,40);
+    this.barG = game.add.graphics(0,0);
     this.uiGroup.add(this.barG);
 
     // Graphics object for the rest of the bar graph
-    this.graphG = game.add.graphics(0,40);
+    this.graphG = game.add.graphics(0,0);
     this.uiGroup.add(this.graphG);
 
     // Graphics object that masks the bar graph
-    this.maskG = game.add.graphics(25, 40);
+    this.maskG = game.add.graphics(25, 0);
     this.uiGroup.add(this.maskG);
     this.maskG.beginFill();
     this.maskG.drawRect(0, 0, 25*this.waterLevels.length, 100);
@@ -46,8 +46,6 @@ var ForecastView = Views.createViewType(
     this.txtMin.visible = false;
     this.createText("RegionHeight", 25, 0, "Castle Height", regionHeightStyle);
     this.txtRegionHeight.visible = false;
-
-    this.createText("Forecast", 40, 40, "Forecast", textStyle);
   },
 
   {
@@ -138,7 +136,7 @@ var ForecastView = Views.createViewType(
         gg.lineStyle(1, 0xff0000, 1);
         gg.moveTo(25, 100-selectedRegion.height);
         gg.lineTo(this.waterLevels.length*25+25, 100-selectedRegion.height);
-        this.txtRegionHeight.y = 120-selectedRegion.height;
+        this.txtRegionHeight.y = 80-selectedRegion.height;
         this.txtRegionHeight.visible=true;
 
 

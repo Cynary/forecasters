@@ -10,25 +10,31 @@ var GameView = Views.createViewType(
     Views.call(this, global.game, x, y);
     this.global = global;
 
-    var btn = this.global.game.add.button(global.game.width/2, 15, 'next_turn', this.nextTurnOnClick, this, 2, 1, 0);
-    btn.anchor = {x:0.5, y:0.0};
-    this.uiGroup.add(btn);
+    this.uiGroup.create(0, -44, 'bottombg');
+
 
     this.nextTurnReady = true;
 
-    var style = { font: "32px Architects Daughter", fill: "#408c99", align: "center" };
+    var style = { font: "32px Architects Daughter", fill: "#ffffff", align: "center" };
 
-    this.createText("Victory", 20, 20, 'Victory progress 0%', style);
-    this.createText("Supplies", 20, 60, 'Supplies: 0', style);
+    this.createText("Victory", 650, 90, '0%', style);
+    this.createText("Supplies", 150, 90, '0', style);
 
-    this.forecastView = new ForecastView(this.global.weather, 590, 450);
+    this.forecastView = new ForecastView(this.global.weather, 400-112, 18);
+    this.uiGroup.add(this.forecastView.uiGroup);
+
+    var btn = this.global.game.add.button(global.game.width/2, 106, 'next_turn', this.nextTurnOnClick, this, 0, 1);
+    btn.anchor = {x:0.5, y:0.0};
+    this.uiGroup.add(btn);
   },
 
   {
 
     update: function() {
-      this.txtVictory.text = 'Victory progress ' + Math.floor(this.global.buildProgress*10)/10 + '%';
-      this.txtSupplies.text = 'Supplies: ' + this.global.supply;
+      this.txtVictory.text = '' + Math.floor(this.global.buildProgress*10)/10 + '%';
+      this.txtVictory.x = 650 - this.txtVictory.width/2;
+      this.txtSupplies.text = '' + this.global.supply;
+      this.txtSupplies.x = 150 - this.txtSupplies.width/2;
 
       this.forecastView.update();
     },
