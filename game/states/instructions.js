@@ -11,9 +11,7 @@ Instructions.prototype = {
   create: function() {
     var style = { font: '32px Architects Daughter', fill: '#ffffff', align: 'center'};
 
-
-    this.instructionsText = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 120, 'Instructions go here; Click anywhere to play', style);
-    this.instructionsText.anchor.setTo(0.5, 0.5);
+    this.game.add.sprite(0, 0, 'instructionbg');
 
     Decorators.addWave(this);
 
@@ -22,7 +20,7 @@ Instructions.prototype = {
     Decorators.fadeIn(this);
   },
   update: function() {
-    Decorators.updateWave(this, this.transitioning ? 200 : -20, this.transitioning ? 5 : 3);
+    Decorators.updateWave(this, this.transitioning ? 200 : -24, this.transitioning ? 5 : 3);
 
     if (this.game.input.activePointer.justPressed()) {
       Decorators.fadeOut(this, 'play');

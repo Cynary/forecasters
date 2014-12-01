@@ -25,6 +25,7 @@ Preload.prototype = {
 
     this.load.spritesheet('playbutton', 'assets/clicktoplaybutton.png', 376, 66);
     this.load.image('menubg', 'assets/title screen.png');
+    this.load.image('instructionbg', 'assets/instruction page.png');
     this.load.image('bottombg', 'assets/bottom panel view-01.png');
 
     this.load.image('wave', 'assets/wave.png');
