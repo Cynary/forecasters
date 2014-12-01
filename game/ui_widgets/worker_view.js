@@ -28,13 +28,12 @@ var WorkerView = Views.createViewType(
     this.imgAnchor.anchor.setTo(0.5,1.0);
     this.imgAnchor.scale = { x: scale, y: scale };
 
+    this.imgStatus = this.uiGroup.create(0, -this.imgPerson.height, 'statusIcons', 2);
+    this.imgStatus.anchor.setTo(0.5, 1.0);
+    this.imgStatus.scale = { x: 0.3, y: 0.3 };
+
     this.lifebar = this.uiGroup.create(-25,0,'lifebar');
 
-    this.createText('Status', -25, -100, 'status',
-      { font: "16px Architects Daughter", fill: "#408c99", align: "center" });
-    this.txtStatus.wordWrapWidth = 50;
-    this.oldStatusText = "";
-    
     this.moving = false;
     this.lastClick = 0;
     this.isSingleClick = {};
@@ -53,6 +52,7 @@ var WorkerView = Views.createViewType(
       if (worker.health <= 0 && this.moving == false) {
         worker.health = 0
         this.moving = true
+        this.imgStatus.frame = 4
         var time = (game.height - this.uiGroup.y) * 5;
         var tween = game.add.tween(this.uiGroup).to({ x: this.uiGroup.x, y: game.height + 400 }, time, Phaser.Easing.Linear.InOut);
         tween.onComplete.add(this.onDeathComplete, this);
@@ -81,19 +81,18 @@ var WorkerView = Views.createViewType(
       // Update the worker's status text
       if (!this.moving) {
         if (worker.currentRegionIndex < worker.targetRegionIndex) {
-          this.txtStatus.text = "Moving >>";
+          this.imgStatus.frame = 6;
         } else if (worker.currentRegionIndex > worker.targetRegionIndex) {
-          this.txtStatus.text = "<< Moving";
+          this.imgStatus.frame = 8;
         } else if (worker.homeRegionIndex === worker.currentRegionIndex) {
           if (worker.building) {
-            this.txtStatus.text = "Building";
+            this.imgStatus.frame = 0;
           } else {
-            this.txtStatus.text = "Gathering";
+            this.imgStatus.frame = 2;
           }
         } else {
-          this.txtStatus.text = "Evacuated";
+          this.imgStatus.frame = 4;
         }
-        this.txtStatus.x = -this.txtStatus.width * 0.5;
       }
       this.lifebar.scale.x = this.worker.health*0.01;
     },
@@ -108,7 +107,7 @@ var WorkerView = Views.createViewType(
         this.imgPerson.visible = false;
         this.imgAnchor.visible = false;
         this.lifebar.visible = false;
-        this.txtStatus.visible = false;
+        this.imgStatus.visible = false;
         this.moving = false;
         // So that it gets cleaned up from region & regionView
         this.worker.dead = true;
