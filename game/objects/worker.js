@@ -24,11 +24,7 @@ Worker.prototype = {
   nextDay: function() {
     this.status = "";
     var damaged = false;
-    // If the worker starts its turn under water, decrease its health.
-    if (this.global.weather.getCurrentWaterLevel() >= this.global.regions[this.currentRegionIndex].height) {
-      this.health -= 50;
-      damaged = true;
-    }
+
     // If the worker is at home, (s)he'll either collect supply, or build the dam
     if (this.homeRegionIndex === this.currentRegionIndex) {
       if (this.building) {
