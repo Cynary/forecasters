@@ -39,6 +39,12 @@ Preload.prototype = {
     this.load.image('person3', 'assets/duck.png');
     this.load.image('person4', 'assets/truck.png');
 
+    this.load.image('mega1', 'assets/mega1-01.png');
+    this.load.image('mega2', 'assets/mega2-01.png');
+    this.load.image('mega3', 'assets/mega3-01.png');
+    this.load.image('mega4', 'assets/mega4-01.png');
+    this.load.image('mega5', 'assets/mega5-01.png');
+
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
     

@@ -51,7 +51,7 @@ Global.prototype = {
 
   levelToY: function(level) {
     // ranges from 0 to 100
-    return (this.weather.global.game.height - 200) * 0.01*(100-level) + 100 * 0.01*level + 120;
+    return 200 + (100-level)/100.0 * (430 - 200);
   },
 
   yToLevel: function(y) {

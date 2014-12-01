@@ -26,7 +26,7 @@ Worker.prototype = {
     var damaged = false;
     // If the worker starts its turn under water, decrease its health.
     if (this.global.weather.getCurrentWaterLevel() >= this.global.regions[this.currentRegionIndex].height) {
-      this.health -= 50;
+      this.health -= 10;
       damaged = true;
     }
     // If the worker is at home, (s)he'll either collect supply, or build the dam
@@ -51,7 +51,7 @@ Worker.prototype = {
     // If the worker ends its turn under water and hasn't already taken damage, decrease its health.
     if (this.global.weather.getCurrentWaterLevel() >= this.global.regions[this.currentRegionIndex].height) {
       if (!damaged) {
-        this.health -= 50;
+        this.health -= 10;
       }
     }
   },

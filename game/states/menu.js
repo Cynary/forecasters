@@ -9,6 +9,9 @@ Menu.prototype = {
 
   },
   create: function() {
+    // TODO: Remove shim
+    this.game.state.start('play');
+
     this.game.add.sprite(0, 0, 'menubg');
 
     this.playButton = this.game.add.button(400, 490, 'playbutton', this.onClickPlay, this, 1, 0);
