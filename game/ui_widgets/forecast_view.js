@@ -20,15 +20,24 @@ var ForecastView = Views.createViewType(
     this.numTweens = 0;
 
     // Graphics object for the bars on the bar graph
-    this.barG = game.add.graphics(0,40);
+    this.barG = game.add.graphics(0,0);
     this.uiGroup.add(this.barG);
 
     // Graphics object for the rest of the bar graph
-    this.graphG = game.add.graphics(0,40);
+    this.graphG = game.add.graphics(0,0);
     this.uiGroup.add(this.graphG);
 
-    var textStyle = { font: "24px Open Sans Condensed", fill: "#408c99", align: "center" };
-    var regionHeightStyle = { font: "12px Open Sans Condensed", fill: "#FF0000", align: "center" };
+    // Graphics object that masks the bar graph
+    this.maskG = game.add.graphics(25, 0);
+    this.uiGroup.add(this.maskG);
+    this.maskG.beginFill();
+    this.maskG.drawRect(0, 0, 25*this.waterLevels.length, 100);
+    this.maskG.endFill();
+
+    this.barG.mask = this.maskG;
+
+    var textStyle = { font: "24px Architects Daughter", fill: "#408c99", align: "center" };
+    var regionHeightStyle = { font: "12px Architects Daughter", fill: "#FF0000", align: "center" };
     // Graphics object for the water level prediction
     this.lineG = game.add.graphics(0,0);
     this.txtMax = game.add.text(25, 0, "predicted high", textStyle);
@@ -37,8 +46,6 @@ var ForecastView = Views.createViewType(
     this.txtMin.visible = false;
     this.createText("RegionHeight", 25, 0, "Castle Height", regionHeightStyle);
     this.txtRegionHeight.visible = false;
-
-    this.createText("Forecast", 0, 0, "Forecast", textStyle);
   },
 
   {
@@ -52,7 +59,7 @@ var ForecastView = Views.createViewType(
       // Check if water levels have been updated
       if (!this.isUpdating) {
         for (var i in waterLevels) {
-          if (this.waterLevels[i].mean != waterLevels[i].mean) {
+          if (Math.abs(this.waterLevels[i].mean - waterLevels[i].mean) > 0.001) {
             this.needsUpdate = true;
           }
         }
@@ -83,12 +90,6 @@ var ForecastView = Views.createViewType(
           tween.start();
         }
 
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
-
         // Reset the position of the graphics object
         bg.x = 25;
 
@@ -106,12 +107,6 @@ var ForecastView = Views.createViewType(
         for (var i in this.waterLevels) {
           this.drawBar(bg, i, this.waterLevels[i]);
         }
-
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       }
 
       var mx = game.input.mousePointer.x;
@@ -132,11 +127,6 @@ var ForecastView = Views.createViewType(
 
         gg.clear();
 
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       } else if (selectedRegion.regionIndex != this.lastSelectedRegionIndex) {
         this.lastSelectedRegionIndex = selectedRegion.regionIndex;
 
@@ -146,15 +136,10 @@ var ForecastView = Views.createViewType(
         gg.lineStyle(1, 0xff0000, 1);
         gg.moveTo(25, 100-selectedRegion.height);
         gg.lineTo(this.waterLevels.length*25+25, 100-selectedRegion.height);
-        this.txtRegionHeight.y = 120-selectedRegion.height;
+        this.txtRegionHeight.y = 80-selectedRegion.height;
         this.txtRegionHeight.visible=true;
 
 
-        // Draw blocky things
-        gg.lineStyle(1, 0x000000, 1);
-        gg.beginFill(0x000000, 1);
-        gg.drawRect(0, 0, 25, 100);
-        gg.drawRect(this.waterLevels.length*25+25, 0, 25, 100);
       }
 
       var lg = this.lineG;
@@ -172,10 +157,10 @@ var ForecastView = Views.createViewType(
         lg.lineTo(800, this.weather.global.levelToY(this.waterLevels[i].min));
 
         this.txtMax.y = this.weather.global.levelToY(this.waterLevels[i].max)-25;
-        this.txtMax.text = "high prediction in " + i + " day" + ((i > 1) ? "s" : "");
+        this.txtMax.text = "high prediction in " + i + " turn" + ((i > 1) ? "s" : "");
         this.txtMax.visible = true;
         this.txtMin.y = this.weather.global.levelToY(this.waterLevels[i].min)-10;
-        this.txtMin.text = "low prediction in " + i + " day" + ((i > 1) ? "s" : "");
+        this.txtMin.text = "low prediction in " + i + " turn" + ((i > 1) ? "s" : "");
         this.txtMin.visible = true;
       } else {
         lg.clear();
@@ -189,17 +174,20 @@ var ForecastView = Views.createViewType(
       i = Math.floor(i);
 
       // Clear out the old bar
-      bg.lineStyle(1, 0x000000, 1);
-      bg.beginFill(0x000000, 1);
+      bg.lineStyle(0, 0xffffff, 1);
+      bg.beginFill(0xffffff, 1);
       bg.drawRect((i+1)*25, 0, 25, 100);
 
+      var loColor = 0x7bced8;
+      var hiColor = 0x35807b;
+
       // Draw the new bar
-      bg.lineStyle(1, 0x5577ff, 1);
-      bg.beginFill(0x5577ff, 1);
+      bg.lineStyle(0, loColor, 1);
+      bg.beginFill(loColor, 1);
       bg.drawRect((i+1)*25, 100-level.mean, 25, level.mean);
       // Uncertainty bar
-      bg.lineStyle(1, 0x77aaff, 1);
-      bg.beginFill(0x77aaff, 1);
+      bg.lineStyle(0, hiColor, 1);
+      bg.beginFill(hiColor, 1);
       bg.drawRect((i+1)*25, 100-level.max, 25, level.max-level.min);
 
     },

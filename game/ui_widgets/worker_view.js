@@ -15,29 +15,32 @@ var WorkerView = Views.createViewType(
     this.imgPerson.anchor.setTo(0.5,1.0);
     this.imgPerson.inputEnabled = true;
     this.imgPerson.input.enableDrag(true);
-    var scale = 50.0 / this.imgPerson.width;
+    var scale = Math.pow(50.0*50.0*50.0 / (this.imgPerson.width * this.imgPerson.width * this.imgPerson.height), 1/3.0);
     this.imgPerson.scale = { x: scale, y: scale };
 
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
     
-    this.imgPerson.events.onInputUp.add(this.changeState, this);
+    this.imgPerson.events.onInputUp.add(this.onClick, this);
 
     this.imgAnchor = this.uiGroup.create(0, 0, this.personKey);
     this.imgAnchor.alpha = 0.0;
     this.imgAnchor.anchor.setTo(0.5,1.0);
     this.imgAnchor.scale = { x: scale, y: scale };
 
-    this.lifebar = this.uiGroup.create(-25,-100,'lifebar');
+    this.imgStatus = this.uiGroup.create(0, -this.imgPerson.height, 'statusIcons', 2);
+    this.imgStatus.anchor.setTo(0.5, 1.0);
+    this.imgStatus.scale = { x: 0.3, y: 0.3 };
 
-    this.createText('Status', -25, -100, 'status',
-      { font: "16px Open Sans Condensed", fill: "#408c99", align: "center" });
-    this.txtStatus.wordWrapWidth = 50;
-    this.oldStatusText = "";
-    
-    this.createText('Name', -20, 0, this.worker.name,
-      { font: "12px Open Sans Condensed", fill: "#408c99", align: "center" });
-        this.moving = false;
+    this.lifebar = this.uiGroup.create(-25,0,'lifebar');
+
+    this.moving = false;
+    this.lastClick = 0;
+    this.isSingleClick = {};
+    this.double_click_delay = 300;
+    this.pointsNum = 10; // Amount of path points between two regions
+    this.pointAnimationTimeMsecs = 30; // Animation time of a single point, in milli seconds
+    this.pointsVisible = 20; // Maximum amount of points visible together at each point of path animation
   },
 
   {
@@ -46,16 +49,14 @@ var WorkerView = Views.createViewType(
       var worker = this.worker;
       var game = worker.global.game;
 
-      if (worker.health <= 0) {
-        // Remove the worker view
-        this.imgPerson.visible = false;
-        this.imgAnchor.visible = false;
-        this.lifebar.visible = false;
-        this.txtStatus.visible = false;
-        this.txtName.visible = false;
-        // So that it gets cleaned up from region & regionView
-        worker.dead = true;
-        return;
+      if (worker.health <= 0 && this.moving == false) {
+        worker.health = 0
+        this.moving = true
+        this.imgStatus.frame = 4
+        var time = (game.height - this.uiGroup.y) * 5;
+        var tween = game.add.tween(this.uiGroup).to({ x: this.uiGroup.x, y: game.height + 400 }, time, Phaser.Easing.Linear.InOut);
+        tween.onComplete.add(this.onDeathComplete, this);
+        tween.start()
       }
       // Check whether or not the worker should move
       var currentRegion = worker.global.regions[worker.currentRegionIndex];
@@ -80,19 +81,18 @@ var WorkerView = Views.createViewType(
       // Update the worker's status text
       if (!this.moving) {
         if (worker.currentRegionIndex < worker.targetRegionIndex) {
-          this.txtStatus.text = "Moving >>";
+          this.imgStatus.frame = 6;
         } else if (worker.currentRegionIndex > worker.targetRegionIndex) {
-          this.txtStatus.text = "<< Moving";
+          this.imgStatus.frame = 8;
         } else if (worker.homeRegionIndex === worker.currentRegionIndex) {
           if (worker.building) {
-            this.txtStatus.text = "Building";
+            this.imgStatus.frame = 0;
           } else {
-            this.txtStatus.text = "Gathering";
+            this.imgStatus.frame = 2;
           }
         } else {
-          this.txtStatus.text = "Evacuated";
+          this.imgStatus.frame = 4;
         }
-        this.txtStatus.x = -this.txtStatus.width * 0.5;
       }
       this.lifebar.scale.x = this.worker.health*0.01;
     },
@@ -101,11 +101,26 @@ var WorkerView = Views.createViewType(
       this.imgAnchor.alpha = 1.0;
       this.imgPerson.alpha = 0.5;
     },
+    
+    onDeathComplete: function(){
+        // Remove the worker view
+        this.imgPerson.visible = false;
+        this.imgAnchor.visible = false;
+        this.lifebar.visible = false;
+        this.imgStatus.visible = false;
+        this.moving = false;
+        // So that it gets cleaned up from region & regionView
+        this.worker.dead = true;
+        return;
+    },
 
     onDragStop: function(sprite, pointer) {
       this.imgAnchor.alpha = 0.0;
       this.imgPerson.alpha = 1.0;
-      this.worker.targetRegionIndex = this.closestRegion().regionIndex;
+      var closestRegionIndex = this.closestRegion().regionIndex;
+      if (closestRegionIndex != this.worker.currentRegionIndex) {
+        this.worker.targetRegionIndex = closestRegionIndex;
+      }
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
     },
@@ -114,11 +129,71 @@ var WorkerView = Views.createViewType(
       this.moving = false;
     },
     
+    onClick: function() {
+      var lastClick = (new Date).getTime();
+      if (lastClick - this.lastClick < this.double_click_delay) {
+        // double click
+        this.changeState();
+        delete this.isSingleClick[this.lastClick];
+        this.lastClick = 0;
+      } else {
+        // potential single click
+        this.lastClick = lastClick;
+        this.isSingleClick[lastClick] = true;
+        setTimeout(function(){
+            if (this.isSingleClick.hasOwnProperty(lastClick)) {
+              // This means the last click wasn't followed by another click,
+              // therefore double-click didn't happen, and we can start animating path.
+              delete this.isSingleClick[lastClick];
+              this.animatePath();
+            }
+          }.bind(this),
+          this.double_click_delay + 10);
+      }
+    },
+
+    animatePath: function() {
+      var sign = Math.sign(this.worker.targetRegionIndex-this.worker.currentRegionIndex);
+      var pointCounter = 0;
+      for (var regionIndex = this.worker.currentRegionIndex; regionIndex != this.worker.targetRegionIndex; regionIndex += sign) {
+        var region1 = this.worker.global.regions[regionIndex];
+        var region2 = this.worker.global.regions[regionIndex + sign];
+        for (var point = 0; point < this.pointsNum; point++) {
+          var ratioX = point/this.pointsNum;
+          var ratioY = 0.5*(1-Math.cos(ratioX * Math.PI)); // cos function will make curvy path
+          setTimeout(function(x, y){
+              var pointView = this.worker.global.game.add.sprite(x, y, "point");
+              pointView.scale = {x: 0.2, y:0.2};
+              pointView.anchor.setTo(0.5, 0.5);
+              pointView.alpha = 0;
+              var tween1 = this.worker.global.game.add.tween(pointView).to({alpha: 1}, this.pointAnimationTimeMsecs*this.pointsVisible/2);
+              tween1.onComplete.add(function() {
+                  var tween2 = this.worker.global.game.add.tween(pointView).to({alpha: 0}, this.pointAnimationTimeMsecs*this.pointsVisible/2);
+                  tween2.onComplete.add(function(){pointView.destroy();}, this);
+                  tween2.start();
+                }, this);
+              tween1.start();
+            }.bind(this),
+            pointCounter * this.pointAnimationTimeMsecs,
+            (1-ratioX)*region1.x + ratioX*region2.x,
+            (1-ratioY)*region1.y + ratioY*region2.y);
+          pointCounter++;
+        }
+      }
+    },
+
     changeState: function(){
-      if (this.worker.building == true){
-        this.worker.building = false;
-      }else if (this.worker.homeRegionIndex === this.worker.currentRegionIndex){
-        this.worker.building = true;
+      // If the worker is in a different region, then just show where it is going
+      if (this.worker.currentRegionIndex != this.worker.homeRegionIndex) {
+        this.animatePath();
+      } else {
+        // Otherwise, change the state between gathering <-> building
+        this.worker.targetRegionIndex = this.worker.currentRegionIndex;
+        if (this.worker.building == true){
+          this.worker.building = false;
+        }else if (this.worker.homeRegionIndex === this.worker.currentRegionIndex){
+          this.worker.building = true;
+        }
       }
     },
 

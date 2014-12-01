@@ -3,15 +3,11 @@
 var Worker = require('./worker');
 
 // Broad Region Class.
-function Region (global, regionIndex, height, numWorkers) {
+function Region (global, regionIndex, height, worker) {
   this.global = global;
   this.height = height;
   this.regionIndex = regionIndex;
-  this.workers = [];
-  // Create a hash set of workers to be able to add/remove them by reference
-  for(var index = 0; index < numWorkers; index++) {
-    this.workers[index] = new Worker(global, regionIndex);
-  }
+  this.workers = [worker];
 
   // TODO: change this once we have normal regions
   this.x = 100+150*regionIndex;

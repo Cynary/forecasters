@@ -1,5 +1,7 @@
 
 'use strict';
+var Decorators = require('./widgets/decorators');
+
 function Menu() {}
 
 Menu.prototype = {
@@ -7,19 +9,43 @@ Menu.prototype = {
 
   },
   create: function() {
-    var style = { font: '65px Open Sans Condensed', fill: '#ffffff', align: 'center'};
 
-    this.titleText = this.game.add.text(this.game.world.centerX, this.game.world.centerY - 120, 'FBF 3rd Playtest - Rising Waters', style);
-    this.titleText.anchor.setTo(0.5, 0.5);
+    this.game.add.sprite(0, 0, 'menubg');
 
-    this.instructionsText = this.game.add.text(this.game.world.centerX, 400, 'Click anywhere to play', { font: '32px Open Sans Condensed', fill: '#ffffff', align: 'center'});
-    this.instructionsText.anchor.setTo(0.5, 0.5);
+    this.playButton = this.game.add.button(400, 490, 'playbutton', this.onClickPlay, this, 1, 0);
+    this.playButton.anchor.setTo(0.5, 0.5);
+    this.playButton.onInputOver.add(this.onClickOver, this);
+    this.playButton.onInputOut.add(this.onClickOut, this);
+
+    Decorators.addWave(this);
+
+    this.hovering = false;
+    this.transitioning = false;
+
+    Decorators.fadeIn(this);
   },
   update: function() {
-    if(this.game.input.activePointer.justPressed()) {
-      this.game.state.start('play');
+    var waterLevel = this.hovering ? 16 : -24;
+    if (this.transitioning) {
+      waterLevel = 200;
     }
-  }
+
+    var speed = this.transitioning ? 5 : 3;
+
+    Decorators.updateWave(this, waterLevel, speed);
+  },
+  onClickPlay: function() {
+    this.transitioning = true;
+
+    Decorators.fadeOut(this, 'instructions');
+  },
+  onClickOver: function() {
+    this.hovering = true;
+  },
+  onClickOut: function() {
+    this.hovering = false;
+  },
+
 };
 
 module.exports = Menu;
