@@ -15,7 +15,8 @@ var WorkerView = Views.createViewType(
     this.imgPerson.anchor.setTo(0.5,1.0);
     this.imgPerson.inputEnabled = true;
     this.imgPerson.input.enableDrag(true);
-    var scale = 50.0 / this.imgPerson.width;
+    var scale = Math.pow(50.0*50.0*50.0 / (this.imgPerson.width * this.imgPerson.width * this.imgPerson.height), 1/3.0);
+    console.log(scale);
     this.imgPerson.scale = { x: scale, y: scale };
 
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
@@ -28,15 +29,13 @@ var WorkerView = Views.createViewType(
     this.imgAnchor.anchor.setTo(0.5,1.0);
     this.imgAnchor.scale = { x: scale, y: scale };
 
-    this.lifebar = this.uiGroup.create(-25,-100,'lifebar');
+    this.lifebar = this.uiGroup.create(-25,0,'lifebar');
 
     this.createText('Status', -25, -100, 'status',
       { font: "16px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.txtStatus.wordWrapWidth = 50;
     this.oldStatusText = "";
     
-    this.createText('Name', -20, 0, this.worker.name,
-      { font: "12px Open Sans Condensed", fill: "#408c99", align: "center" });
     this.moving = false;
     this.lastClick = 0;
     this.isSingleClick = {};
@@ -111,7 +110,6 @@ var WorkerView = Views.createViewType(
         this.imgAnchor.visible = false;
         this.lifebar.visible = false;
         this.txtStatus.visible = false;
-        this.txtName.visible = false;
         this.moving = false;
         // So that it gets cleaned up from region & regionView
         this.worker.dead = true;

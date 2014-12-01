@@ -2,6 +2,7 @@
 
 var WeatherForecast = require('./weatherForecast');
 var Region = require('./region');
+var Worker = require('./worker');
 
 // Global class, containing regions, weather, victory progress, etc.
 // forecastDays - positive integer meaning how many days the forecast should show
@@ -12,9 +13,12 @@ function Global(game, forecastDays, regionHeights, numWorkersPerRegion) {
   this.buildProgress = 0;
   this.supply = 0;
   this.weather = new WeatherForecast(this, forecastDays);
-  this.regions = []
+  this.regions = [];
+  this.workers = [];
   for(var index in regionHeights) {
-    this.regions.push(new Region(this, Number(index), regionHeights[index], numWorkersPerRegion));
+    var worker = new Worker(this, Number(index));
+    this.workers.push(worker);
+    this.regions.push(new Region(this, Number(index), regionHeights[index], worker));
   }
 }
 
@@ -25,6 +29,15 @@ Global.prototype = {
       this.regions[index].nextDay();
     }
     this.weather.nextDay();
+    for(var index in this.workers) {
+      var worker = this.workers[index];
+      // If the worker ends its turn under water and hasn't already taken damage, decrease its health.
+      if (this.weather.getCurrentWaterLevel() >= this.regions[worker.currentRegionIndex].height) {
+        if (!worker.damaged) {
+          worker.health -= 50;
+        }
+      }
+    }
   },
 
   increaseBuildProgress: function(worker) {
