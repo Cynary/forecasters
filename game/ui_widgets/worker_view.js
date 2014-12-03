@@ -53,10 +53,10 @@ var WorkerView = Views.createViewType(
         worker.health = 0
         this.moving = true
         this.imgStatus.frame = 4
-        var time = (game.height - this.uiGroup.y) * 5;
-        var tween = game.add.tween(this.uiGroup).to({ x: this.uiGroup.x, y: game.height + 400 }, time, Phaser.Easing.Linear.InOut);
+        var time = (game.height - this.uiGroup.y);
+        var tween = game.add.tween(this.uiGroup).to({ x: this.uiGroup.x, y: game.height-50 }, time, Phaser.Easing.Linear.InOut);
         tween.onComplete.add(this.onDeathComplete, this);
-        tween.start()
+        tween.start();
       }
       // Check whether or not the worker should move
       var currentRegion = worker.global.regions[worker.currentRegionIndex];
