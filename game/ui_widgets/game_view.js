@@ -41,6 +41,7 @@ var GameView = Views.createViewType(
 
     nextTurnOnClick: function() {
       if (this.nextTurnReady) {
+        this.game.sound.play('click');
         this.nextTurnReady = false;
         this.global.nextDay();
         this.global.game.time.events.add(600, function() { this.nextTurnReady = true; }, this);

@@ -96,6 +96,7 @@ var WorkerView = Views.createViewType(
     },
 
     onDragStart: function(sprite, pointer) {
+      this.game.sound.play('click');
       this.imgAnchor.alpha = 1.0;
       this.imgPerson.alpha = 0.5;
     },
@@ -117,6 +118,7 @@ var WorkerView = Views.createViewType(
       this.imgPerson.alpha = 1.0;
       var closestRegionIndex = this.closestRegion().regionIndex;
       if (closestRegionIndex != this.worker.currentRegionIndex) {
+        this.game.sound.play('click');
         this.worker.targetRegionIndex = closestRegionIndex;
         this.animatePath();
       }

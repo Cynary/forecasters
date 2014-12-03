@@ -20,9 +20,12 @@ GameOver.prototype = {
     this.instructionText.anchor.setTo(0.5, 0.5);
 
     Decorators.fadeIn(this);
+    this.endReady = false;
+    this.time.events.add(600, function() { this.endReady = true; }, this);
   },
   update: function () {
-    if(this.game.input.activePointer.justPressed()) {
+    if(this.endReady && this.game.input.activePointer.justPressed()) {
+      this.sound.play('click');
       this.game.state.start('play');
     }
   }
