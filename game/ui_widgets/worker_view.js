@@ -22,6 +22,7 @@ var WorkerView = Views.createViewType(
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
     
     this.imgPerson.events.onInputUp.add(this.onClick, this);
+    this.imgPerson.events.onInputOver.add(this.onMouseOver, this);
 
     this.imgAnchor = this.uiGroup.create(0, 0, this.personKey);
     this.imgAnchor.alpha = 0.0;
@@ -35,9 +36,6 @@ var WorkerView = Views.createViewType(
     this.lifebar = this.uiGroup.create(-25,0,'lifebar');
 
     this.moving = false;
-    this.lastClick = 0;
-    this.isSingleClick = {};
-    this.double_click_delay = 300;
     this.pointsNum = 10; // Amount of path points between two regions
     this.pointAnimationTimeMsecs = 30; // Animation time of a single point, in milli seconds
     this.pointsVisible = 20; // Maximum amount of points visible together at each point of path animation
@@ -120,6 +118,7 @@ var WorkerView = Views.createViewType(
       var closestRegionIndex = this.closestRegion().regionIndex;
       if (closestRegionIndex != this.worker.currentRegionIndex) {
         this.worker.targetRegionIndex = closestRegionIndex;
+        this.animatePath();
       }
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
@@ -129,27 +128,12 @@ var WorkerView = Views.createViewType(
       this.moving = false;
     },
     
+    onMouseOver: function() {
+      this.animatePath();
+    },
+
     onClick: function() {
-      var lastClick = (new Date).getTime();
-      if (lastClick - this.lastClick < this.double_click_delay) {
-        // double click
-        this.changeState();
-        delete this.isSingleClick[this.lastClick];
-        this.lastClick = 0;
-      } else {
-        // potential single click
-        this.lastClick = lastClick;
-        this.isSingleClick[lastClick] = true;
-        setTimeout(function(){
-            if (this.isSingleClick.hasOwnProperty(lastClick)) {
-              // This means the last click wasn't followed by another click,
-              // therefore double-click didn't happen, and we can start animating path.
-              delete this.isSingleClick[lastClick];
-              this.animatePath();
-            }
-          }.bind(this),
-          this.double_click_delay + 10);
-      }
+      this.changeState();
     },
 
     animatePath: function() {
