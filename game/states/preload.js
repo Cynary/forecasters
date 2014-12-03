@@ -57,6 +57,9 @@ Preload.prototype = {
     this.load.image('mega3', 'assets/mega3-01.png');
     this.load.image('mega4', 'assets/mega4-01.png');
     this.load.image('mega5', 'assets/mega5-01.png');
+    
+    this.load.image('hint', 'assets/hint background.png');
+    this.load.image('hint_close', 'assets/button-cross.png');
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
