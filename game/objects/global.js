@@ -12,6 +12,7 @@ function Global(game, forecastDays, regionHeights, numWorkersPerRegion) {
   this.game = game;
   this.buildProgress = 0;
   this.supply = 0;
+  this.turn = 0;
   this.weather = new WeatherForecast(this, forecastDays);
   this.regions = [];
   this.workers = [];
@@ -38,6 +39,7 @@ Global.prototype = {
         }
       }
     }
+  this.turn += 1
   },
 
   increaseBuildProgress: function(worker) {
