@@ -58,6 +58,9 @@ Preload.prototype = {
     this.load.image('mega4', 'assets/mega4-01.png');
     this.load.image('mega5', 'assets/mega5-01.png');
 
+    this.load.audio('main', 'assets/main.mp3');
+    this.load.audio('click', 'assets/click.mp3');
+
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);
   },

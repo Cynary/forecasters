@@ -22,7 +22,8 @@ Instructions.prototype = {
   update: function() {
     Decorators.updateWave(this, this.transitioning ? 200 : -24, this.transitioning ? 5 : 3);
 
-    if (this.game.input.activePointer.justPressed()) {
+    if (!this.transitioning && this.game.input.activePointer.justPressed()) {
+      this.sound.play('click');
       Decorators.fadeOut(this, 'play');
       this.transitioning = true;
     }
