@@ -14,6 +14,7 @@ var WorkerView = Views.createViewType(
     this.imgPerson = this.uiGroup.create(0, 0, this.personKey);
     this.imgPerson.anchor.setTo(0.5,1.0);
     this.imgPerson.inputEnabled = true;
+    this.imgPerson.input.useHandCursor = true;
     this.imgPerson.input.enableDrag(true);
     var scale = Math.pow(50.0*50.0*50.0 / (this.imgPerson.width * this.imgPerson.width * this.imgPerson.height), 1/3.0);
     this.imgPerson.scale = { x: scale, y: scale };

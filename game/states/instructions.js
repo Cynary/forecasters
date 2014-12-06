@@ -11,7 +11,8 @@ Instructions.prototype = {
   create: function() {
     var style = { font: '32px Architects Daughter', fill: '#ffffff', align: 'center'};
 
-    this.game.add.sprite(0, 0, 'instructionbg');
+    var instr = this.game.add.sprite(0, 0, 'instructionbg');
+    $('canvas').css('cursor', 'pointer')
 
     Decorators.addWave(this);
 
@@ -23,6 +24,8 @@ Instructions.prototype = {
     Decorators.updateWave(this, this.transitioning ? 200 : -24, this.transitioning ? 5 : 3);
 
     if (!this.transitioning && this.game.input.activePointer.justPressed()) {
+      $('canvas').css('cursor', '')
+
       this.sound.play('click');
       Decorators.fadeOut(this, 'play');
       this.transitioning = true;

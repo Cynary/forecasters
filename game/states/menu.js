@@ -16,7 +16,7 @@ Menu.prototype = {
     this.playButton.anchor.setTo(0.5, 0.5);
     this.playButton.onInputOver.add(this.onClickOver, this);
     this.playButton.onInputOut.add(this.onClickOut, this);
-
+    this.playButton.input.useHandCursor = true;
     Decorators.addWave(this);
 
     this.hovering = false;

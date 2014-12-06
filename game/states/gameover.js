@@ -22,11 +22,15 @@ GameOver.prototype = {
     Decorators.fadeIn(this);
     this.endReady = false;
     this.time.events.add(600, function() { this.endReady = true; }, this);
+    $('canvas').css('cursor', 'pointer')
+
   },
   update: function () {
     if(this.endReady && this.game.input.activePointer.justPressed()) {
+      $('canvas').css('cursor', '')
       this.sound.play('click');
       this.game.state.start('play');
+      this.game.input.useHandCursor = false;
     }
   }
 };

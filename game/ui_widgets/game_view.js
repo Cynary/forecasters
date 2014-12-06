@@ -25,6 +25,8 @@ var GameView = Views.createViewType(
 
     var btn = this.global.game.add.button(global.game.width/2, 106, 'next_turn', this.nextTurnOnClick, this, 0, 1);
     btn.anchor = {x:0.5, y:0.0};
+    btn.input.useHandCursor = true;
+
     this.uiGroup.add(btn);
   },
 

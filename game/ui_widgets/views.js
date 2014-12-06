@@ -20,6 +20,7 @@ Views.prototype = {
     var btn = this.game.add.button(x, y, key, callback, this);
     this['btn' + name] = btn;
     this.uiGroup.add(btn);
+    btn.input.useHandCursor = true;
   },
 
   // Creates a text called txtname
