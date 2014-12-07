@@ -28,6 +28,13 @@ var GameView = Views.createViewType(
     btn.input.useHandCursor = true;
 
     this.uiGroup.add(btn);
+
+    this.btnSound = this.global.game.add.button(795, 150, 'sound_on', this.soundOnClick, this);
+    this.btnSound.input.useHandCursor = true;
+    this.btnSound.anchor = {x: 1.0, y: 1.0}
+    this.btnSound.scale.setTo(0.5, 0.5);
+    this.uiGroup.add(this.btnSound);
+
   },
 
   {
@@ -48,7 +55,17 @@ var GameView = Views.createViewType(
         this.global.nextDay();
         this.global.game.time.events.add(600, function() { this.nextTurnReady = true; }, this);
       }
-    }
+    },
+
+    soundOnClick: function() {
+      if (this.global.game.sound.mute) {
+        this.global.game.sound.mute = false;
+        this.btnSound.loadTexture('sound_on');
+      } else {
+        this.global.game.sound.mute = true;
+        this.btnSound.loadTexture('sound_off');
+      }
+    },
 
   }
 
