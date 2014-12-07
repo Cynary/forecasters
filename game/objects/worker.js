@@ -37,6 +37,7 @@ Worker.prototype = {
       this.building = false;
       if (this.global.supply <= 0){
         this.health -= 20;
+        this.dmgCause = "candy";
       }
       this.global.decreaseSupply(this);
 

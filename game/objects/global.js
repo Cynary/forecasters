@@ -36,6 +36,7 @@ Global.prototype = {
       if (this.weather.getCurrentWaterLevel() >= this.regions[worker.currentRegionIndex].height) {
         if (!worker.damaged) {
           worker.health -= 50;
+          worker.dmgCause = "water";
         }
       }
     }

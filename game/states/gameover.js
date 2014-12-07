@@ -19,7 +19,13 @@ GameOver.prototype = {
       this.congratsText.anchor.setTo(0.5, 0.5);
     } else {
       this.game.add.sprite(0, 0, 'losebg');
-      this.congratsText = this.game.add.text(this.game.world.centerX, 250, 'You lost in ' + this.turnsTaken + ' turns!', style);
+      var ctext = "You lost!";
+      if (this.loseCondition == "water") {
+        ctext = "Your toys are lost to the waves!";
+      } else if (this.loseCondition == "candy") {
+        ctext = "Your toys ran out of candy!";
+      }
+      this.congratsText = this.game.add.text(this.game.world.centerX, 250, ctext, style);
       this.congratsText2 = this.game.add.text(this.game.world.centerX, 325, 'You finished ' + (Math.floor(this.castleProgress*10)/10) + '% of the castle', style);
       this.congratsText.anchor.setTo(0.5, 0.5);
       this.congratsText2.anchor.setTo(0.5, 0.5);
@@ -42,10 +48,14 @@ GameOver.prototype = {
       Decorators.fadeOut(this, 'play');
     }
   },
-  init: function(won, turnsTaken, castleProgress) {
+  init: function(won, p1, p2) {
     this.won = won;
-    this.turnsTaken = turnsTaken;
-    this.castleProgress = castleProgress;
+    if (this.won) {
+      this.turnsTaken = p1;
+    } else {
+      this.castleProgress = p1;
+      this.loseCondition = p2;
+    }
   }
 };
 module.exports = GameOver;

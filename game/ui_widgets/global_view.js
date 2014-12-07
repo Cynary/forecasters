@@ -66,9 +66,9 @@ var GlobalView = Views.createViewType(
         }
       }
       if (numWorkersAlive <= 3) {
-        Decorators.fadeOut(this.playState, 'gameover', false, this.global.turn, this.global.buildProgress);
+        Decorators.fadeOut(this.playState, 'gameover', false, this.global.buildProgress, this.global.dmgCause);
       } else if (this.global.buildProgress >= 100) {
-        Decorators.fadeOut(this.playState, 'gameover', true, this.global.turn, this.global.buildProgress);
+        Decorators.fadeOut(this.playState, 'gameover', true, this.global.turn);
       }
 
       for (var regionViewIndex in this.regionViews) {

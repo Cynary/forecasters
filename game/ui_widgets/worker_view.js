@@ -111,6 +111,7 @@ var WorkerView = Views.createViewType(
         this.moving = false;
         // So that it gets cleaned up from region & regionView
         this.worker.dead = true;
+        this.worker.global.dmgCause = this.worker.dmgCause;
         return;
     },
 
