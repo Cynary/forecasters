@@ -36,7 +36,7 @@ Worker.prototype = {
       // Otherwise, (s)he'll decrease supply and move left or right
       this.building = false;
       if (this.global.supply <= 0){
-        this.health -= 10;
+        this.health -= 20;
       }
       this.global.decreaseSupply(this);
 

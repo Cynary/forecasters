@@ -29,12 +29,15 @@ var GameView = Views.createViewType(
 
     this.uiGroup.add(btn);
 
-    this.btnSound = this.global.game.add.button(795, 150, 'sound_on', this.soundOnClick, this);
+    var soundTex = this.global.game.sound.mute ? 'sound_off' : 'sound_on';
+    this.btnSound = this.global.game.add.button(796, 150, soundTex, this.soundOnClick, this);
     this.btnSound.input.useHandCursor = true;
     this.btnSound.anchor = {x: 1.0, y: 1.0}
     this.btnSound.scale.setTo(0.5, 0.5);
     this.uiGroup.add(this.btnSound);
 
+    // Created by useiconic.com
+    // from the Noun Project
   },
 
   {

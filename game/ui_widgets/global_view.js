@@ -19,7 +19,7 @@ var GlobalView = Views.createViewType(
     this.background = this.uiGroup.create(0, 0, 'background', 0);
     this.background.scale = { x: 0.5, y: 0.5 };
 
-    this.megaView = new MegaView(this.global, 460, 170);
+    this.megaView = new MegaView(this.global, 480, 170);
 
     // Create region views. They will take care of creating WorkerViews recursively
     this.regionViews = [];
@@ -66,9 +66,11 @@ var GlobalView = Views.createViewType(
         }
       }
       if (numWorkersAlive <= 3) {
-        this.global.game.won = false;
-        Decorators.fadeOut(this.playState, 'gameover');
+        Decorators.fadeOut(this.playState, 'gameover', false, this.global.turn, this.global.buildProgress);
+      } else if (this.global.buildProgress >= 100) {
+        Decorators.fadeOut(this.playState, 'gameover', true, this.global.turn, this.global.buildProgress);
       }
+
       for (var regionViewIndex in this.regionViews) {
         this.regionViews[regionViewIndex].update();
       }

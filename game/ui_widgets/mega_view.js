@@ -32,7 +32,7 @@ var MegaView = Views.createViewType(
       
       if (this.global.buildProgress != this.lastProgress) {
         var bp = this.global.buildProgress;
-        var j = Math.floor(bp/20.0);
+        var j = Math.min(Math.floor(bp/20.0),4);
         for (var i = 0; i < j; ++i) {
           this.mega[i].alpha = 1.0;
         }

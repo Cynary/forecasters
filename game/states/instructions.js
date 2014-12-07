@@ -14,6 +14,8 @@ Instructions.prototype = {
     var instr = this.game.add.sprite(0, 0, 'instructionbg');
     $('canvas').css('cursor', 'pointer')
 
+    this.txt3 = this.game.add.text(0, 700, "Click Anywhere to Continue");
+
     Decorators.addWave(this);
 
     this.transitioning = false;
@@ -33,5 +35,10 @@ Instructions.prototype = {
   },
 
 };
+
+// box size 225 x 175
+// bg color f8efd6
+// text color aa9f74
+// box bg color e8dfb4
 
 module.exports = Instructions;

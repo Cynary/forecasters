@@ -45,12 +45,6 @@ Global.prototype = {
   increaseBuildProgress: function(worker) {
     // Currently it doesn't depend on worker, but it may in the future
     this.buildProgress += 1;
-    
-    if (this.buildProgress >= 100) {
-      // You won!
-      this.game.won = true;
-      this.game.state.start('gameover');
-    }
   },
 
   increaseSupply: function(worker) {
@@ -66,7 +60,7 @@ Global.prototype = {
 
   levelToY: function(level) {
     // ranges from 0 to 100
-    return 200 + (100-level)/100.0 * (430 - 200);
+    return 230 + (100-level)/100.0 * (430 - 230);
   },
 
   yToLevel: function(y) {
