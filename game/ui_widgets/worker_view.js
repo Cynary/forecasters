@@ -119,9 +119,9 @@ var WorkerView = Views.createViewType(
       this.imgAnchor.alpha = 0.0;
       this.imgPerson.alpha = 1.0;
       var closestRegionIndex = this.closestRegion().regionIndex;
+      this.game.sound.play('click');
+      this.worker.targetRegionIndex = closestRegionIndex;
       if (closestRegionIndex != this.worker.currentRegionIndex) {
-        this.game.sound.play('click');
-        this.worker.targetRegionIndex = closestRegionIndex;
         this.animatePath();
       }
       this.imgPerson.x = 0;
