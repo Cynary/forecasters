@@ -69,6 +69,7 @@ var GameView = Views.createViewType(
           this.game.sound.play('smallWave');
         }
         this.nextTurnReady = false;
+        this.nextDayAnimation(); // This MUST happen before global.nextDay()
         this.global.nextDay();
         this.global.game.time.events.add(600, function() { this.nextTurnReady = true; }, this);
       }
@@ -98,7 +99,34 @@ var GameView = Views.createViewType(
       $('canvas').css('cursor', '')
 
       }
-    } 
+    }, 
+
+    nextDayAnimation: function() {
+      for(var regionIndex in this.global.regions) {
+        var region = this.global.regions[regionIndex];
+        for (var workerIndex in region.workers) {
+          var worker = region.workers[workerIndex];
+          if (worker.building && worker.homeRegionIndex == worker.currentRegionIndex) {
+            continue; // Candy isn't used or produced if the worker is building
+          }
+          var point1 = {x:region.x, y:region.y-15};
+          var point2 = {x: 150, y: 485};
+          if (worker.homeRegionIndex != worker.currentRegionIndex) {
+            // If worker isn't at home (s)he is consuming a candy
+            var temp = point1;
+            point1 = point2;
+            point2 = temp;
+          }
+          var sprite = this.game.add.sprite(point1.x, point1.y, 'candy');
+          sprite.anchor.set(0.5,0.5);
+          sprite.scale.set(0.5,0.5);
+          var tween = this.global.game.add.tween(sprite).to(point2, 600, Phaser.Easing.Linear.InOut);
+          tween.onComplete.add(function(){this.visible=false;}, sprite);
+          tween.start();
+        }
+      }
+    },
+
 
   }
 
