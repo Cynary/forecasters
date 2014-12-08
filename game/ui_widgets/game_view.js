@@ -110,12 +110,12 @@ var GameView = Views.createViewType(
         for (var workerIndex in region.workers) {
           var worker = region.workers[workerIndex];
           var offset = _.indexOf(crWorkers, worker) - (crWorkers.length - 1) * 0.5;
-          if (worker.building && worker.homeRegionIndex == worker.currentRegionIndex) {
+          if (worker.building && this.homeRegionIndex === this.targetRegionIndex) {
             continue; // Candy isn't used or produced if the worker is building
           }
           var point1 = {x:region.x + offset*52, y:region.y-15};
           var point2 = {x: 150, y: 485};
-          if (worker.homeRegionIndex != worker.currentRegionIndex) {
+          if (worker.currentRegionIndex != worker.homeRegionIndex || worker.currentRegionIndex != worker.targetRegionIndex) {
             // If worker isn't at home (s)he is consuming a candy
             var temp = point1;
             point1 = point2;

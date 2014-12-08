@@ -26,7 +26,7 @@ Worker.prototype = {
     var damaged = false;
 
     // If the worker is at home, (s)he'll either collect supply, or build the dam
-    if (this.homeRegionIndex === this.currentRegionIndex) {
+    if (this.homeRegionIndex === this.currentRegionIndex && this.homeRegionIndex === this.targetRegionIndex) {
       if (this.building) {
         this.buildState();
       } else {
@@ -48,10 +48,12 @@ Worker.prototype = {
   },
 
   buildState: function() {
+    this.building = true;
     this.global.increaseBuildProgress(this);
   },
 
   gatherState: function() {
+    this.building = false;
     this.global.increaseSupply(this);
   },
 
