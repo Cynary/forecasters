@@ -27,14 +27,7 @@ Instructions.prototype = {
   },
 
   onMouseClick: function() {
-    if (this.instructiondone) {
-      $('canvas').css('cursor', '')
-
-      this.sound.play('click');
-      Decorators.fadeOut(this, 'realmenu');
-      this.transitioning = true;
-    }
-    else{
+    if (!this.instructiondone) {
       this.sound.play('click');
       if (this.instr.frame <= 1){
         this.instr.frame += 1;
@@ -42,6 +35,13 @@ Instructions.prototype = {
       else if (this.instr.frame == 2){
         this.instructiondone = true;
       }
+    }
+    if (this.instructiondone) {
+      $('canvas').css('cursor', '')
+
+      this.sound.play('click');
+      Decorators.fadeOut(this, 'realmenu');
+      this.transitioning = true;
     }
   },
 
