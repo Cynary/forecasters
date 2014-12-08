@@ -2,6 +2,7 @@
 
 var Views = require('./views');
 var ForecastView = require('./forecast_view');
+var _ = require('underscore');
 
 var GameView = Views.createViewType(
 
@@ -104,18 +105,28 @@ var GameView = Views.createViewType(
     nextDayAnimation: function() {
       for(var regionIndex in this.global.regions) {
         var region = this.global.regions[regionIndex];
+        var crWorkers = region.workers;
+        var candiesLeft = this.global.supply;
         for (var workerIndex in region.workers) {
           var worker = region.workers[workerIndex];
+          var offset = _.indexOf(crWorkers, worker) - (crWorkers.length - 1) * 0.5;
           if (worker.building && worker.homeRegionIndex == worker.currentRegionIndex) {
             continue; // Candy isn't used or produced if the worker is building
           }
-          var point1 = {x:region.x, y:region.y-15};
+          var point1 = {x:region.x + offset*52, y:region.y-15};
           var point2 = {x: 150, y: 485};
           if (worker.homeRegionIndex != worker.currentRegionIndex) {
             // If worker isn't at home (s)he is consuming a candy
             var temp = point1;
             point1 = point2;
             point2 = temp;
+            if (candiesLeft <= 0) {
+              continue;
+            } else {
+              candiesLeft -= 1;
+            }
+          } else {
+            candiesLeft += 1;
           }
           var sprite = this.game.add.sprite(point1.x, point1.y, 'candy');
           sprite.anchor.set(0.5,0.5);

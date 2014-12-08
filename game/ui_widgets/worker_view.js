@@ -79,6 +79,9 @@ var WorkerView = Views.createViewType(
         }
       }
 
+      worker.nextX = nextX;
+      worker.nextY = nextY;
+
       // Update the worker's status text
       if (!this.moving) {
         if (worker.currentRegionIndex < worker.targetRegionIndex) {
