@@ -31,7 +31,7 @@ GameOver.prototype = {
       this.congratsText2.anchor.setTo(0.5, 0.5);
     }
 
-    this.instructionText = this.game.add.text(this.game.world.centerX, 530, 'Click To Play Again', style);
+    this.instructionText = this.game.add.text(this.game.world.centerX, 530, 'click to return to main menu', style);
     this.instructionText.anchor.setTo(0.5, 0.5);
 
     Decorators.fadeIn(this);
@@ -45,7 +45,7 @@ GameOver.prototype = {
       $('canvas').css('cursor', '')
       this.sound.play('click');
       this.game.input.useHandCursor = false;
-      Decorators.fadeOut(this, 'play');
+      Decorators.fadeOut(this, 'realmenu');
     }
   },
   init: function(won, p1, p2) {

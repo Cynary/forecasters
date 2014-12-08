@@ -24,11 +24,17 @@ Preload.prototype = {
     this.asset.anchor.setTo(0.5, 0.5);
 
     this.load.spritesheet('playbutton', 'assets/clicktoplaybutton.png', 376, 66);
+    this.load.spritesheet('instrbutton', 'assets/instrbutton.png', 376, 66);
+    this.load.spritesheet('creditsbutton', 'assets/creditsbutton.png', 376, 66);
+
     this.load.image('menubg', 'assets/title screen.png');
+    this.load.image('credits', 'assets/credits.png');
     this.load.image('winbg', 'assets/win.png');
     this.load.image('losebg', 'assets/lose.png');
     this.load.image('instructionbg', 'assets/instruction page.png');
+    this.load.spritesheet('instructionpages', 'assets/instructionpages.png', 800, 600);
     this.load.image('bottombg', 'assets/bottom panel view-01.png');
+    this.load.image('truemenu', 'assets/truemenu.png');
 
     this.load.image('wave', 'assets/wave.png');
     this.load.image('line', 'assets/line.png');
@@ -71,6 +77,7 @@ Preload.prototype = {
 
     this.load.image('sound_on', 'assets/noun_45321_cc.png');
     this.load.image('sound_off', 'assets/noun_45312_cc.png');
+    this.load.image('help', 'assets/help.png');
 
     this.load.onLoadComplete.addOnce(this.onLoadComplete, this);
     this.load.setPreloadSprite(this.asset);

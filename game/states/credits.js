@@ -2,21 +2,18 @@
 'use strict';
 var Decorators = require('./widgets/decorators');
 
-function Menu() {}
+function Credits() {}
 
-Menu.prototype = {
+Credits.prototype = {
   preload: function() {
 
   },
   create: function() {
 
-    this.game.add.sprite(0, 0, 'menubg');
+    this.game.add.sprite(0, 0, 'credits');
+    this.game.input.onDown.add(this.onClickPlay, this);
+    $('canvas').css('cursor', 'pointer')
 
-    this.playButton = this.game.add.button(400, 490, 'playbutton', this.onClickPlay, this, 1, 0);
-    this.playButton.anchor.setTo(0.5, 0.5);
-    this.playButton.onInputOver.add(this.onClickOver, this);
-    this.playButton.onInputOut.add(this.onClickOut, this);
-    this.playButton.input.useHandCursor = true;
     Decorators.addWave(this);
 
     this.hovering = false;
@@ -24,10 +21,6 @@ Menu.prototype = {
 
     Decorators.fadeIn(this);
 
-    this.sound.add('main');
-    this.sound.add('click');
-    this.sound.stopAll();
-    this.sound.play('main',1,true);
   },
   update: function() {
     var waterLevel = this.hovering ? 16 : -24;
@@ -51,7 +44,6 @@ Menu.prototype = {
   onClickOut: function() {
     this.hovering = false;
   },
-
 };
 
-module.exports = Menu;
+module.exports = Credits;

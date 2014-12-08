@@ -11,24 +11,37 @@ Instructions.prototype = {
   create: function() {
     var style = { font: '32px Architects Daughter', fill: '#c7ba7a', align: 'center'};
 
-    var instr = this.game.add.sprite(0, 0, 'instructionbg');
+    this.instr = this.game.add.sprite(0, 0, 'instructionpages', 0);
+    this.game.input.onDown.add(this.onMouseClick, this);
     $('canvas').css('cursor', 'pointer')
 
     Decorators.addWave(this);
 
     this.transitioning = false;
+    this.instructiondone = false;
 
     Decorators.fadeIn(this);
   },
   update: function() {
     Decorators.updateWave(this, this.transitioning ? 200 : -30, this.transitioning ? 5 : 3);
+  },
 
-    if (!this.transitioning && this.game.input.activePointer.justPressed()) {
+  onMouseClick: function() {
+    if (this.instructiondone) {
       $('canvas').css('cursor', '')
 
       this.sound.play('click');
-      Decorators.fadeOut(this, 'play');
+      Decorators.fadeOut(this, 'realmenu');
       this.transitioning = true;
+    }
+    else{
+      this.sound.play('click');
+      if (this.instr.frame <= 1){
+        this.instr.frame += 1;
+      }
+      else if (this.instr.frame == 2){
+        this.instructiondone = true;
+      }
     }
   },
 

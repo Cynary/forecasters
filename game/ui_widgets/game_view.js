@@ -36,6 +36,15 @@ var GameView = Views.createViewType(
     this.btnSound.scale.setTo(0.5, 0.5);
     this.uiGroup.add(this.btnSound);
 
+    this.helpButton = this.global.game.add.button(796, 100, 'help', this.helpOnClick,this);
+    this.helpButton.input.useHandCursor = true;
+    this.helpButton.anchor = {x:1.0, y:1.0};
+    this.helpButton.scale.setTo(0.8, 0.8);
+    this.uiGroup.add(this.helpButton)
+    this.helpOpen = false;
+
+    this.game.input.onDown.add(this.onMouseClick, this);
+
     // Created by useiconic.com
     // from the Noun Project
   },
@@ -74,6 +83,22 @@ var GameView = Views.createViewType(
         this.btnSound.loadTexture('sound_off');
       }
     },
+
+    helpOnClick: function(){
+    this.helpOpen = true;
+    this.instr = this.game.add.sprite(0, 0, 'instructionbg', 0);
+    $('canvas').css('cursor', 'pointer')
+
+    },
+
+    onMouseClick: function(){
+      if(this.helpOpen){
+        this.instr.destroy();
+        this.helpOpen = false;
+      $('canvas').css('cursor', '')
+
+      }
+    } 
 
   }
 
