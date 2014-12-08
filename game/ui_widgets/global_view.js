@@ -35,7 +35,7 @@ var GlobalView = Views.createViewType(
     this.waveView = new WaveView(this.global.weather);
 
     this.gameView = new GameView(this.global, 0, 450);
-    this.tooltip1 = new TooltipView(this.global, 515, 20, ['Click your toys \n to change their status.','Drag and drop toys \n to keep them away \n from the waves', 'Reference the forecast \n to prepare in advance', "You'll lost the game \n if you lose more than \n 2 workers.", 'Build the megacastle \n to win the game.'], 1)
+    //this.tooltip1 = new TooltipView(this.global, 515, 20, ['Click your toys \n to change their status.','Drag and drop toys \n to keep them away \n from the waves', 'Reference the forecast \n to prepare in advance', "You'll lost the game \n if you lose more than \n 2 workers.", 'Build the megacastle \n to win the game.'], 1)
   },
 
   {
@@ -77,7 +77,7 @@ var GlobalView = Views.createViewType(
       this.waveView.update();
       this.megaView.update();
       this.gameView.update();
-      this.tooltip1.update(this.global.turn);
+      //this.tooltip1.update(this.global.turn);
     },
 
   }
