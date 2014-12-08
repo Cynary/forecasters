@@ -10,7 +10,7 @@ GameOver.prototype = {
 
   },
   create: function () {
-    var style = { font: '52px Architects Daughter', fill: '#405bb2', align: 'center'};
+    var style = { font: '36px Architects Daughter', fill: '#FFFFFF', align: 'center'};
 
 
     if (this.won) {

@@ -65,6 +65,9 @@ Preload.prototype = {
 
     this.load.audio('main', 'assets/main.mp3');
     this.load.audio('click', 'assets/click.mp3');
+    this.load.audio('smallWave', 'assets/smallWave.mp3');
+    this.load.audio('largeWave', 'assets/largeWave.mp3');
+    this.load.audio('falling', 'assets/falling.mp3');
 
     this.load.image('sound_on', 'assets/noun_45321_cc.png');
     this.load.image('sound_off', 'assets/noun_45312_cc.png');

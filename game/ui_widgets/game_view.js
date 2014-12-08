@@ -53,7 +53,12 @@ var GameView = Views.createViewType(
 
     nextTurnOnClick: function() {
       if (this.nextTurnReady) {
-        this.game.sound.play('click');
+        if(this.global.weather.waterLevels[1].mean >= 50){
+          this.game.sound.play('largeWave');
+        }
+        else{
+          this.game.sound.play('smallWave');
+        }
         this.nextTurnReady = false;
         this.global.nextDay();
         this.global.game.time.events.add(600, function() { this.nextTurnReady = true; }, this);

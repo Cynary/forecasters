@@ -16,19 +16,20 @@ var WorkerView = Views.createViewType(
     this.imgPerson.inputEnabled = true;
     this.imgPerson.input.useHandCursor = true;
     this.imgPerson.input.enableDrag(true);
-    var scale = Math.pow(50.0*50.0*50.0 / (this.imgPerson.width * this.imgPerson.width * this.imgPerson.height), 1/3.0);
-    this.imgPerson.scale = { x: scale, y: scale };
+    this.scale = Math.pow(50.0*50.0*50.0 / (this.imgPerson.width * this.imgPerson.width * this.imgPerson.height), 1/3.0);
+    this.imgPerson.scale = { x: this.scale, y: this.scale };
 
     this.imgPerson.events.onDragStart.add(this.onDragStart, this);
     this.imgPerson.events.onDragStop.add(this.onDragStop, this);
     
     this.imgPerson.events.onInputUp.add(this.onClick, this);
     this.imgPerson.events.onInputOver.add(this.onMouseOver, this);
+    this.imgPerson.events.onInputOut.add(this.onMouseOut, this);
 
     this.imgAnchor = this.uiGroup.create(0, 0, this.personKey);
     this.imgAnchor.alpha = 0.0;
     this.imgAnchor.anchor.setTo(0.5,1.0);
-    this.imgAnchor.scale = { x: scale, y: scale };
+    this.imgAnchor.scale = { x: this.scale, y: this.scale };
 
     this.imgStatus = this.uiGroup.create(0, -this.imgPerson.height, 'statusIcons', 2);
     this.imgStatus.anchor.setTo(0.5, 1.0);
@@ -56,6 +57,7 @@ var WorkerView = Views.createViewType(
         var tween = game.add.tween(this.uiGroup).to({ x: this.uiGroup.x, y: game.height-50 }, time, Phaser.Easing.Linear.InOut);
         tween.onComplete.add(this.onDeathComplete, this);
         tween.start();
+        this.game.sound.play("falling");
       }
       // Check whether or not the worker should move
       var currentRegion = worker.global.regions[worker.currentRegionIndex];
@@ -126,6 +128,8 @@ var WorkerView = Views.createViewType(
       }
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
+      this.onMouseOut();
+
     },
 
     onMoveComplete: function() {
@@ -134,6 +138,15 @@ var WorkerView = Views.createViewType(
     
     onMouseOver: function() {
       this.animatePath();
+      this.imgPerson.scale = {x: this.scale + 0.25, y: this.scale + 0.25};
+      this.imgStatus.anchor.setTo(0.5, 2.0);
+      this.game.sound.play('click');
+    },
+
+    onMouseOut: function(){
+      this.imgPerson.scale = {x: this.scale, y: this.scale};
+      this.imgStatus.anchor.setTo(0.5, 1.0);
+
     },
 
     onClick: function() {

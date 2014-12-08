@@ -9,12 +9,10 @@ Instructions.prototype = {
 
   },
   create: function() {
-    var style = { font: '32px Architects Daughter', fill: '#ffffff', align: 'center'};
+    var style = { font: '32px Architects Daughter', fill: '#c7ba7a', align: 'center'};
 
     var instr = this.game.add.sprite(0, 0, 'instructionbg');
     $('canvas').css('cursor', 'pointer')
-
-    this.txt3 = this.game.add.text(0, 700, "Click Anywhere to Continue");
 
     Decorators.addWave(this);
 
@@ -23,7 +21,7 @@ Instructions.prototype = {
     Decorators.fadeIn(this);
   },
   update: function() {
-    Decorators.updateWave(this, this.transitioning ? 200 : -24, this.transitioning ? 5 : 3);
+    Decorators.updateWave(this, this.transitioning ? 200 : -30, this.transitioning ? 5 : 3);
 
     if (!this.transitioning && this.game.input.activePointer.justPressed()) {
       $('canvas').css('cursor', '')
