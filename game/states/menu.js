@@ -2,6 +2,8 @@
 'use strict';
 var Decorators = require('./widgets/decorators');
 
+var done = false;
+
 function Menu() {}
 
 Menu.prototype = {
@@ -20,7 +22,7 @@ Menu.prototype = {
     Decorators.fadeIn(this, 750);
     
     this.time.events.add(Phaser.Timer.SECOND * 3, function () {
-          Decorators.fadeOut(this, 'realmenu', null, null, null, 750);
+          this.onTimeOut();
         }, this);
 
     // Another sound maybe?
@@ -30,16 +32,17 @@ Menu.prototype = {
 //    this.sound.play('main',1,true);
   },
   update: function() {
-    var waterLevel = this.hovering ? 16 : -24;
-    if (this.transitioning) {
-      waterLevel = 200;
+    // detect esc button pressed.
+    if(this.input.keyboard.addKey(Phaser.Keyboard.ESC).isDown){
+      this.onTimeOut();
     }
-
-    var speed = this.transitioning ? 5 : 3;
-
-    Decorators.updateWave(this, waterLevel, speed);
   },
-
+  onTimeOut: function() {
+    if(!done) {
+      done = true;
+      Decorators.fadeOut(this, 'realmenu', null, null, null, 750);
+    }
+  },
 };
 
 module.exports = Menu;
