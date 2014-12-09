@@ -102,7 +102,7 @@ var WorkerView = Views.createViewType(
     },
 
     onDragStart: function(sprite, pointer) {
-      this.game.sound.play('click');
+      // this.game.sound.play('click'); // played at onMouseOver.
       this.imgAnchor.alpha = 1.0;
       this.imgPerson.alpha = 0.5;
     },
@@ -131,8 +131,11 @@ var WorkerView = Views.createViewType(
       }
       this.imgPerson.x = 0;
       this.imgPerson.y = 0;
-      this.onMouseOut();
-
+      
+      // Little trick to reset the input handlers (benign bug.)
+      // Without this, input handlers aren't reset, hence clicking
+      // on sprite will leave it in it's original state (not desired.)
+      throw "(@OK) Resetting Input Handlers";
     },
 
     onMoveComplete: function() {
