@@ -3,21 +3,24 @@
 var _ = require('underscore');
 
 module.exports = {
-  fadeIn: function(state) {
+  
+  fadeIn: function(state, fadeInSpeed) {
+    fadeInSpeed = (typeof fadeInSpeed !== 'undefined') ? fadeInSpeed : 300;
     state.g = state.game.add.graphics(0,0);
     state.g.alpha = 1.0;
     state.g.lineStyle(1, 0xffffff, 1).beginFill(0xffffff,1).drawRect(0,0,state.game.width,state.game.height);
-    var tween = state.game.add.tween(state.g).to({alpha: 0.0}, 300, Phaser.Easing.Exponential.In);
+    var tween = state.game.add.tween(state.g).to({alpha: 0.0}, fadeInSpeed, Phaser.Easing.Exponential.In);
     tween.start();
-  },
+  },  
 
-  fadeOut: function(state, target, p1, p2, p3) {
+  fadeOut: function(state, target, p1, p2, p3, fadeOutSpeed) {
+    fadeOutSpeed = (typeof fadeOutSpeed !== 'undefined') ? fadeOutSpeed : 300;
     if (!state.g) {
       state.g = state.game.add.graphics(0,0);
       state.g.alpha = 0.0;
       state.g.lineStyle(1, 0xffffff, 1).beginFill(0xffffff,1).drawRect(0,0,state.game.width,state.game.height);
     }
-    var tween = state.game.add.tween(state.g).to({alpha: 1.0}, 300, Phaser.Easing.Exponential.In);
+    var tween = state.game.add.tween(state.g).to({alpha: 1.0}, fadeOutSpeed, Phaser.Easing.Exponential.In);
     tween.onComplete.add(_.partial(this.fadeOutTweenComplete, target, p1, p2, p3), state);
     tween.start();
   },
