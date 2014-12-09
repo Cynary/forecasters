@@ -154,7 +154,6 @@ var WorkerView = Views.createViewType(
 
     onClick: function() {
       this.changeState();
-      this.onMouseOver();
     },
 
     animatePath: function() {
