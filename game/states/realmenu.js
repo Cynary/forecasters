@@ -34,9 +34,9 @@ Realmenu.prototype = {
     Decorators.fadeIn(this);
 
     this.sound.add('main');
-    this.sound.add('click');
+    this.sound.add('click', 0.5);
     this.sound.stopAll();
-    this.sound.play('main',1,true);
+    this.sound.play('main',0.5,true);
   },
   update: function() {
     var waterLevel = this.hovering ? 16 : -24;
