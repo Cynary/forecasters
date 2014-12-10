@@ -16,7 +16,6 @@ var RegionView = Views.createViewType(
     //this.imgRegion.scale = {x: 0.25, y: 3};
     //this.imgRegion.anchor.x = 0.5;
 
-    this.workerViews = [];
 
   },
 
@@ -36,9 +35,6 @@ var RegionView = Views.createViewType(
         }
       }
       
-      for(var index in this.region.workers) {
-        this.workerViews[index].update();
-      }
     },
   }
 );

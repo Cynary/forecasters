@@ -40,7 +40,19 @@ Global.prototype = {
         }
       }
     }
-  this.turn += 1
+    this.turn += 1
+
+    for (var r in this.regions) {
+      var region = this.regions[r];
+      for (var w = 0; w < region.workers.length; ++w) {
+        var worker = region.workers[w];
+        if (worker.currentRegionIndex != r) {
+          region.workers.splice(w, 1);
+          w -= 1;
+          this.regions[worker.currentRegionIndex].workers.push(worker);
+        }
+      }
+    }
   },
 
   increaseBuildProgress: function(worker) {

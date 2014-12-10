@@ -41,6 +41,8 @@ var WorkerView = Views.createViewType(
     this.pointsNum = 10; // Amount of path points between two regions
     this.pointAnimationTimeMsecs = 30; // Animation time of a single point, in milli seconds
     this.pointsVisible = 20; // Maximum amount of points visible together at each point of path animation
+
+    this.dead = false;
   },
 
   {

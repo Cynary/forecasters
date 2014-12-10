@@ -17,13 +17,14 @@ function Worker(global, homeRegionIndex) {
   this.building = false;
   this.health = 100;
   this.name = generateName();
+  this.gotCandy = false;
 }
 
 Worker.prototype = {
 
   nextDay: function() {
     this.status = "";
-    var damaged = false;
+    this.gotCandy = false;
 
     // If the worker is at home, (s)he'll either collect supply, or build the dam
     if (this.homeRegionIndex === this.currentRegionIndex && this.homeRegionIndex === this.targetRegionIndex) {
@@ -38,6 +39,8 @@ Worker.prototype = {
       if (this.global.supply <= 0){
         this.health -= 20;
         this.dmgCause = "candy";
+      } else {
+        this.gotCandy = true;
       }
       this.global.decreaseSupply(this);
 
@@ -49,15 +52,18 @@ Worker.prototype = {
 
   buildState: function() {
     this.building = true;
+    this.status = "build";
     this.global.increaseBuildProgress(this);
   },
 
   gatherState: function() {
     this.building = false;
+    this.status = "gather";
     this.global.increaseSupply(this);
   },
 
   moveState: function() {
+    this.status = "move";
     if (this.currentRegionIndex < this.targetRegionIndex) {
       this.currentRegionIndex++;
     } else if (this.currentRegionIndex > this.targetRegionIndex) {

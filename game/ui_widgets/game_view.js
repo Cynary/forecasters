@@ -70,8 +70,8 @@ var GameView = Views.createViewType(
           this.game.sound.play('smallWave');
         }
         this.nextTurnReady = false;
-        this.nextDayAnimation(); // This MUST happen before global.nextDay()
         this.global.nextDay();
+        this.nextDayAnimation();
         this.global.game.time.events.add(600, function() { this.nextTurnReady = true; }, this);
       }
     },
@@ -87,10 +87,9 @@ var GameView = Views.createViewType(
     },
 
     helpOnClick: function(){
-    this.helpOpen = true;
-    this.instr = this.game.add.sprite(0, 0, 'instructionbg', 0);
-    $('canvas').css('cursor', 'pointer')
-
+      this.helpOpen = true;
+      this.instr = this.game.add.sprite(0, 0, 'instructionbg', 0);
+      $('canvas').css('cursor', 'pointer')
     },
 
     onMouseClick: function(){
@@ -103,50 +102,37 @@ var GameView = Views.createViewType(
     }, 
 
     nextDayAnimation: function() {
-      // Count how many candies we have in supply + how many candies the workers generate (only +1s)
-      var candiesLeft = this.global.supply;
-      for(var regionIndex in this.global.regions) {
-        var region = this.global.regions[regionIndex];
-        var candiesLeft = this.global.supply;
-        for (var workerIndex in region.workers) {
-          var worker = region.workers[workerIndex];
-          if (worker.homeRegionIndex == worker.currentRegionIndex &&
-              worker.homeRegionIndex == worker.targetRegionIndex && !worker.building) {
-            candiesLeft++;
-          }
-        }
-      }
-
       for(var regionIndex in this.global.regions) {
         var region = this.global.regions[regionIndex];
         for (var workerIndex in region.workers) {
           var worker = region.workers[workerIndex];
           var offset = Number(workerIndex) - (region.workers.length - 1) * 0.5;
+
           var point1 = {x:region.x + offset*52, y:region.y-15};
           var point2 = {x: 150, y: 485};
-          if (worker.currentRegionIndex != worker.homeRegionIndex || worker.currentRegionIndex != worker.targetRegionIndex) {
+
+          if (worker.status == "move" || worker.status == "") {
             // If worker isn't at home (s)he is consuming a candy
-            var temp = point1;
-            point1 = point2;
-            point2 = temp;
-            // If not enough candies are left, don't generate the animation
-            if (candiesLeft <= 0) {
-              continue;
+            if (worker.gotCandy) {
+              var temp = point1;
+              point1 = point2;
+              point2 = temp;
             } else {
-              candiesLeft -= 1;
+              continue;
             }
           }
-          if (worker.homeRegionIndex == worker.currentRegionIndex &&
-              worker.homeRegionIndex == worker.targetRegionIndex && worker.building) {
+
+          if (worker.status == "build") {
             var sprite = this.game.add.sprite(point1.x, point1.y, 'building');
             point2 = {x: 650, y: 485};
           } else {
             var sprite = this.game.add.sprite(point1.x, point1.y, 'candy');
           }
+
           sprite.anchor.set(0.5,0.5);
           sprite.scale.set(0.5,0.5);
-          var tween = this.global.game.add.tween(sprite).to(point2, 600, Phaser.Easing.Linear.InOut);
-          tween.onComplete.add(function(){this.visible=false;}, sprite);
+          var tween = this.global.game.add.tween(sprite).to(point2, 900, Phaser.Easing.Quadratic.InOut);
+          tween.onComplete.add(function(){this.destroy();}, sprite);
           tween.start();
         }
       }
